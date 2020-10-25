@@ -1,11 +1,10 @@
 #ifndef ListaEditor_h
 #define ListaEditor_h
 
-#include "Editor.h"
-
 typedef struct celulaEditor CelulaEditor;
 typedef struct listaEditor ListaEditor;
 
+#include "Editor.h"
 
 ListaEditor* InicializaListaEditor (void);
 

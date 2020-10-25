@@ -2,6 +2,7 @@
 #include "ListaEditor.h"
 #include "ListaPagina.h"
 #include "ListaContribuicao.h"
+#include "ListaLink.h"
 
 int
 main(int argc, char *argv[])
@@ -49,11 +50,14 @@ main(int argc, char *argv[])
     InsereListaPagina(listaPagina, fisica);
     InsereListaPagina(listaPagina, artes);
     InsereListaPagina(listaPagina, ufes);
+
+    InsereListaLink(RetornaLinkPagina(fisica), ufes);
     
 
     ImprimeListaPagina(listaPagina);
 
     printf("\n");
+    
 
     DestroiListaPagina(listaPagina);
     DestroiPagina(fisica);
@@ -63,6 +67,10 @@ main(int argc, char *argv[])
     DestroiContribuicao(contribuicao2);
     DestroiContribuicao(contribuicao3);
 
+
+
+
+    
 
     return 0;
 }

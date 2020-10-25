@@ -5,7 +5,7 @@
 # Estrutura de Dados 1
 #
 
-wiked: testador.c Contribuicao.c Editor.c Link.c Pagina.c ListaEditor.c ListaPagina.c
+wiked: testador.c Contribuicao.c Editor.c ListaLink.c Pagina.c ListaEditor.c ListaPagina.c
 	gcc -ggdb -std=c99 -Wall -Werror -o wiked.out *.c
 
 clean:

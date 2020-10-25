@@ -16,6 +16,7 @@ struct pagina
 {
     char* nome;
     ListaContribuicao* contrib;
+    ListaLink* link;
 };
 
 
@@ -23,6 +24,7 @@ Pagina* InicializaPagina (char* nome)
 {
     Pagina* pagina = (Pagina*)malloc(sizeof(Pagina));
     pagina->contrib = InicializaListaContribuicao();
+    pagina->link = InicializaListaLink();
 
     int n = strlen(nome) + 1;
     char *pagina_nome = malloc(n);
@@ -39,6 +41,9 @@ void ImprimePagina(Pagina* pag)
 {
     printf("%s\n", pag->nome);
     ImprimeListaContribuicao(pag->contrib);
+    ImprimeListaLink(pag->link);
+
+    printf("\n");
 }
 
 
@@ -51,8 +56,14 @@ ListaContribuicao* RetornaContribuicaoPagina(Pagina* pag)
     return pag->contrib;
 }
 
+ListaLink* RetornaLinkPagina(Pagina* pag)
+{
+    return pag->link;
+}
+
 void DestroiPagina(Pagina* pag){
     free(pag->nome);
     DestroiListaContribuicao(pag->contrib);
+    DestroiListaLink(pag->link);
     free(pag);
 }
