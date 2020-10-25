@@ -1,0 +1,12 @@
+#
+# Makefile
+#
+# Trabalho 1
+# Estrutura de Dados 1
+#
+
+wiked: testador.c Contribuicao.c Editor.c Link.c Pagina.c ListaEditor.c ListaPagina.c
+	gcc -ggdb -std=c99 -Wall -Werror -o wiked.out *.c
+
+clean:
+	rm -f *.o a.out core wiked.out
