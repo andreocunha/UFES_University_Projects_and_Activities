@@ -30,13 +30,17 @@ void InsereListaEditor(ListaEditor* lista, Editor* ed)
 {
     CelulaEditor* nova = (CelulaEditor*)malloc(sizeof(CelulaEditor));
     nova->ed = ed;
+    nova->prox = NULL;
 
-    nova->prox = lista->prim;
-    lista->prim = nova;
-
-    if(lista->ult == NULL)
+    if(lista->prim == NULL && lista->ult == NULL)
     {
+        lista->prim = nova;
         lista->ult = nova;
+    }
+    else
+    {
+        lista->ult->prox = nova;
+        lista->ult = nova; 
     }
 
 }

@@ -1,35 +1,35 @@
-#include "ListaPagina.h"
+#include "ListaContribuicao.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 
-struct celulaPagina
+struct celulaContribuicao
 {
-    Pagina* pag;
-    CelulaPagina* prox;
+    Contribuicao* contrib;
+    CelulaContribuicao* prox;
 };
 
 
-struct listaPagina
+struct listaContribuicao
 {
-    CelulaPagina* prim;
-    CelulaPagina* ult;
+    CelulaContribuicao* prim;
+    CelulaContribuicao* ult;
 };
 
-ListaPagina* InicializaListaPagina (void)
+ListaContribuicao* InicializaListaContribuicao (void)
 {
-    ListaPagina* lista = (ListaPagina*)malloc(sizeof(ListaPagina));
+    ListaContribuicao* lista = (ListaContribuicao*)malloc(sizeof(ListaContribuicao));
     lista->prim = NULL;
     lista->ult = NULL;
     return lista;
 }
 
 
-void InsereListaPagina(ListaPagina* lista, Pagina* pag)
+void InsereListaContribuicao(ListaContribuicao* lista, Contribuicao* contrib)
 {
-    CelulaPagina* nova = (CelulaPagina*)malloc(sizeof(CelulaPagina));
-    nova->pag = pag;
+    CelulaContribuicao* nova = (CelulaContribuicao*)malloc(sizeof(CelulaContribuicao));
+    nova->contrib = contrib;
     nova->prox = NULL;
 
     if(lista->prim == NULL && lista->ult == NULL)
@@ -42,25 +42,26 @@ void InsereListaPagina(ListaPagina* lista, Pagina* pag)
         lista->ult->prox = nova;
         lista->ult = nova; 
     }
+
 }
 
 
-Pagina* RemoveListaPagina(ListaPagina* lista, char* chave)
+Contribuicao* RemoveListaContribuicao(ListaContribuicao* lista, char* chave)
 {
-    CelulaPagina* p = lista->prim;
-    Pagina* pag;
-    CelulaPagina* ant = NULL;
+    CelulaContribuicao* p = lista->prim;
+    Contribuicao* ed;
+    CelulaContribuicao* ant = NULL;
 
     for (p = lista->prim; p!=NULL; p = p->prox) {
-        if (strcmp(RetornaNomePagina (p->pag), chave)== 0)
+        if (strcmp(RetornaTextoContribuicao (p->contrib), chave)== 0)
         {
             break;
         }
         ant = p;
     }
 
-    // Atribui a Pagina de retorno
-    pag = p->pag;
+    // Atribui a Contribuicao de retorno
+    ed = p->contrib;
 
     // se for o unico
     if(p == lista->prim && p == lista->ult)
@@ -83,23 +84,23 @@ Pagina* RemoveListaPagina(ListaPagina* lista, char* chave)
     
     free(p);
 
-    return pag;
+    return ed;
 }
 
-void ImprimeListaPagina(ListaPagina* lista)
+void ImprimeListaContribuicao(ListaContribuicao* lista)
 {
-    CelulaPagina* p;
+    CelulaContribuicao* p;
 
     for (p = lista->prim; p != NULL; p = p->prox)
     {
-        ImprimePagina(p->pag);
+        ImprimeContribuicao(p->contrib);
     }
 }
 
-void DestroiListaPagina(ListaPagina* lista)
+void DestroiListaContribuicao(ListaContribuicao* lista)
 {
-    CelulaPagina* p = lista->prim;
-    CelulaPagina* temp;
+    CelulaContribuicao* p = lista->prim;
+    CelulaContribuicao* temp;
 
     while (p != NULL)
     {
