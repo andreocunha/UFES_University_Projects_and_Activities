@@ -10,7 +10,7 @@ ListaEditor* InicializaListaEditor (void);
 
 void InsereListaEditor(ListaEditor* lista, Editor* ed);
 
-Editor* RemoveListaEditor(ListaEditor* lista, char* chave);
+void RemoveListaEditor(ListaEditor* lista, char* chave);
 
 void ImprimeListaEditor(ListaEditor* lista);
 

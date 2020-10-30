@@ -45,10 +45,9 @@ void InsereListaLink(ListaLink* lista, Pagina* pag)
 }
 
 
-Pagina* RemoveListaLink(ListaLink* lista, char* chave)
+void RemoveListaLink(ListaLink* lista, char* chave)
 {
     CelulaLink* p = lista->prim;
-    Pagina* pag;
     CelulaLink* ant = NULL;
 
     for (p = lista->prim; p!=NULL; p = p->prox) {
@@ -59,8 +58,10 @@ Pagina* RemoveListaLink(ListaLink* lista, char* chave)
         ant = p;
     }
 
-    // Atribui a Pagina de retorno
-    pag = p->pag;
+    if(p == NULL)
+    {
+        return;
+    }
 
     // se for o unico
     if(p == lista->prim && p == lista->ult)
@@ -83,7 +84,6 @@ Pagina* RemoveListaLink(ListaLink* lista, char* chave)
     
     free(p);
 
-    return pag;
 }
 
 void ImprimeListaLink(ListaLink* lista)

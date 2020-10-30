@@ -10,7 +10,7 @@ ListaLink* InicializaListaLink (void);
 
 void InsereListaLink(ListaLink* lista, Pagina* pag);
 
-Pagina* RemoveListaLink(ListaLink* lista, char* chave);
+void RemoveListaLink(ListaLink* lista, char* chave);
 
 void ImprimeListaLink(ListaLink* lista);
 

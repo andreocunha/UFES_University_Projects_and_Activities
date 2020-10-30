@@ -8,6 +8,8 @@ struct celulaPagina
 {
     Pagina* pag;
     CelulaPagina* prox;
+    ListaContribuicao* contrib;
+    ListaLink* link;
 };
 
 
@@ -32,6 +34,9 @@ void InsereListaPagina(ListaPagina* lista, Pagina* pag)
     nova->pag = pag;
     nova->prox = NULL;
 
+    nova->contrib = InicializaListaContribuicao();
+    nova->link = InicializaListaLink();
+
     if(lista->prim == NULL && lista->ult == NULL)
     {
         lista->prim = nova;
@@ -45,22 +50,25 @@ void InsereListaPagina(ListaPagina* lista, Pagina* pag)
 }
 
 
-Pagina* RemoveListaPagina(ListaPagina* lista, char* chave)
+void RemoveListaPagina(ListaPagina* lista, char* chave)
 {
-    CelulaPagina* p = lista->prim;
-    Pagina* pag;
+    CelulaPagina* p;
     CelulaPagina* ant = NULL;
 
     for (p = lista->prim; p!=NULL; p = p->prox) {
-        if (strcmp(RetornaNomePagina (p->pag), chave)== 0)
+        if (strcmp(RetornaNomePagina(p->pag), chave)== 0)
         {
             break;
         }
         ant = p;
     }
 
-    // Atribui a Pagina de retorno
-    pag = p->pag;
+    if(p == NULL)
+    {
+        printf("ERRO: não existe a pagina %s\n", chave);
+        return;
+    }
+
 
     // se for o unico
     if(p == lista->prim && p == lista->ult)
@@ -78,12 +86,39 @@ Pagina* RemoveListaPagina(ListaPagina* lista, char* chave)
     }
     else // caso comum
     {
-        ant->prox = p->prox;
+        ant->prox = p->prox; 
     }
-    
-    free(p);
 
-    return pag;
+    DestroiListaContribuicao(p->contrib);
+    DestroiListaLink(p->link);
+    DestroiPagina(p->pag);
+    free(p); 
+    
+}
+
+static CelulaPagina* RetornaPagina(ListaPagina* lista ,char* chave)
+{
+    CelulaPagina* p = lista->prim;
+
+    for (p = lista->prim; p!=NULL; p = p->prox) {
+        if (strcmp(RetornaNomePagina (p->pag), chave)== 0)
+        {
+            return p;
+        }
+    }
+    return NULL;
+}
+
+ListaContribuicao* RetornaListaContribuicaoPagina(ListaPagina* lista, char* chave)
+{
+    CelulaPagina* pag = RetornaPagina(lista, chave);
+    return pag->contrib;
+}
+
+ListaLink* RetornaListaLinkPagina(ListaPagina* lista, char* chave)
+{
+    CelulaPagina* pag = RetornaPagina(lista, chave);
+    return pag->link;
 }
 
 void ImprimeListaPagina(ListaPagina* lista)
@@ -93,6 +128,10 @@ void ImprimeListaPagina(ListaPagina* lista)
     for (p = lista->prim; p != NULL; p = p->prox)
     {
         ImprimePagina(p->pag);
+        ImprimeListaContribuicao(p->contrib);
+        ImprimeListaLink(p->link);
+
+        printf("\n");
     }
 }
 
@@ -105,6 +144,9 @@ void DestroiListaPagina(ListaPagina* lista)
     {
         temp = p;
         p = p->prox;
+        DestroiPagina(temp->pag);
+        DestroiListaContribuicao(temp->contrib);
+        DestroiListaLink(temp->link);
         free(temp);
     }
     free(lista);

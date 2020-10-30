@@ -15,6 +15,7 @@
 struct editor 
 {
     char* nome;
+    ListaContribuicao* contrib;
 };
 
 
@@ -22,6 +23,8 @@ struct editor
 Editor* InicializaEditor (char* nome) 
 {
     Editor* editor = (Editor*)malloc(sizeof(Editor));
+    
+    editor->contrib = InicializaListaContribuicao(); // cria uma lista vazia
 
     int n = strlen(nome) + 1;
     char *editor_nome = malloc(n);
@@ -39,6 +42,11 @@ void ImprimeEditor(Editor* ed)
     printf("%s\n", ed->nome);
 }
 
+void InsereContribuicaoEditor(Editor* ed, Contribuicao* contrib)
+{
+    InsereListaContribuicao(ed->contrib, contrib);
+}
+
 
 char* RetornaNomeEditor(Editor* ed){
     return ed->nome;
@@ -46,5 +54,6 @@ char* RetornaNomeEditor(Editor* ed){
 
 void DestroiEditor(Editor* ed){
     free(ed->nome);
+    free(ed->contrib);
     free(ed);
 }

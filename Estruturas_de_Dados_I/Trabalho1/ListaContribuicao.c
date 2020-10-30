@@ -49,7 +49,7 @@ void InsereListaContribuicao(ListaContribuicao* lista, Contribuicao* contrib)
 Contribuicao* RemoveListaContribuicao(ListaContribuicao* lista, char* chave)
 {
     CelulaContribuicao* p = lista->prim;
-    Contribuicao* ed;
+    Contribuicao* contrib;
     CelulaContribuicao* ant = NULL;
 
     for (p = lista->prim; p!=NULL; p = p->prox) {
@@ -61,7 +61,7 @@ Contribuicao* RemoveListaContribuicao(ListaContribuicao* lista, char* chave)
     }
 
     // Atribui a Contribuicao de retorno
-    ed = p->contrib;
+    contrib = p->contrib;
 
     // se for o unico
     if(p == lista->prim && p == lista->ult)
@@ -84,7 +84,7 @@ Contribuicao* RemoveListaContribuicao(ListaContribuicao* lista, char* chave)
     
     free(p);
 
-    return ed;
+    return contrib;
 }
 
 void ImprimeListaContribuicao(ListaContribuicao* lista)

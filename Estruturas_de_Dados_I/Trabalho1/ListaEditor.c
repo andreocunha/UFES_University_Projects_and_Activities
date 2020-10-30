@@ -46,10 +46,9 @@ void InsereListaEditor(ListaEditor* lista, Editor* ed)
 }
 
 
-Editor* RemoveListaEditor(ListaEditor* lista, char* chave)
+void RemoveListaEditor(ListaEditor* lista, char* chave)
 {
     CelulaEditor* p = lista->prim;
-    Editor* ed;
     CelulaEditor* ant = NULL;
 
     for (p = lista->prim; p!=NULL; p = p->prox) {
@@ -60,8 +59,10 @@ Editor* RemoveListaEditor(ListaEditor* lista, char* chave)
         ant = p;
     }
 
-    // Atribui a editor de retorno
-    ed = p->ed;
+    if(p == NULL)
+    {
+        return;
+    }
 
     // se for o unico
     if(p == lista->prim && p == lista->ult)
@@ -82,9 +83,9 @@ Editor* RemoveListaEditor(ListaEditor* lista, char* chave)
         ant->prox = p->prox;
     }
     
+    DestroiEditor(p->ed);
     free(p);
 
-    return ed;
 }
 
 void ImprimeListaEditor(ListaEditor* lista)
@@ -106,6 +107,7 @@ void DestroiListaEditor(ListaEditor* lista)
     {
         temp = p;
         p = p->prox;
+        DestroiEditor(temp->ed);
         free(temp);
     }
     free(lista);

@@ -15,35 +15,37 @@
 struct pagina 
 {
     char* nome;
-    ListaContribuicao* contrib;
-    ListaLink* link;
+    char* arquivo;
 };
 
 
-Pagina* InicializaPagina (char* nome) 
+Pagina* InicializaPagina (char* nome, char* arquivo) 
 {
     Pagina* pagina = (Pagina*)malloc(sizeof(Pagina));
-    pagina->contrib = InicializaListaContribuicao();
-    pagina->link = InicializaListaLink();
 
     int n = strlen(nome) + 1;
-    char *pagina_nome = malloc(n);
+    char* pagina_nome = malloc(n);
     if(pagina_nome)
     {
         strcpy(pagina_nome, nome);
     }
-
     pagina->nome = pagina_nome;
+
+    n = strlen(arquivo) + 1;
+    char* arquivo_nome = malloc(n);
+    if(arquivo_nome)
+    {
+        strcpy(arquivo_nome, arquivo);
+    }
+    pagina->arquivo = arquivo_nome;
+
     return pagina;
 }
 
 void ImprimePagina(Pagina* pag)
 {
     printf("%s\n", pag->nome);
-    ImprimeListaContribuicao(pag->contrib);
-    ImprimeListaLink(pag->link);
-
-    printf("\n");
+    printf("%s\n", pag->arquivo);
 }
 
 
@@ -51,19 +53,8 @@ char* RetornaNomePagina(Pagina* pag){
     return pag->nome;
 }
 
-ListaContribuicao* RetornaContribuicaoPagina(Pagina* pag)
-{
-    return pag->contrib;
-}
-
-ListaLink* RetornaLinkPagina(Pagina* pag)
-{
-    return pag->link;
-}
-
 void DestroiPagina(Pagina* pag){
     free(pag->nome);
-    DestroiListaContribuicao(pag->contrib);
-    DestroiListaLink(pag->link);
+    free(pag->arquivo);
     free(pag);
 }

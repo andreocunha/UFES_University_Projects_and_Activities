@@ -3,14 +3,9 @@
 
 typedef struct pagina Pagina;
 
-#include "ListaContribuicao.h"
-#include "ListaLink.h"
-
-Pagina* InicializaPagina (char* nome);
+Pagina* InicializaPagina (char* nome, char* arquivo);
 void ImprimePagina(Pagina* pag);
 char* RetornaNomePagina(Pagina* pag);
-ListaContribuicao* RetornaContribuicaoPagina(Pagina* pag);
-ListaLink* RetornaLinkPagina(Pagina* pag);
 void DestroiPagina(Pagina* pag);
 
 
