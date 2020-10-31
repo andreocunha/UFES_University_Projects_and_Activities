@@ -46,6 +46,21 @@ void InsereListaEditor(ListaEditor* lista, Editor* ed)
 }
 
 
+Editor* RetornaEditor(ListaEditor* lista ,char* chave)
+{
+    CelulaEditor* p = lista->prim;
+
+    for (p = lista->prim; p!=NULL; p = p->prox) {
+        if (strcmp(RetornaNomeEditor (p->ed), chave)== 0)
+        {
+            return p->ed;
+        }
+    }
+    return NULL;
+}
+
+
+
 void RemoveListaEditor(ListaEditor* lista, char* chave)
 {
     CelulaEditor* p = lista->prim;

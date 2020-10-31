@@ -14,6 +14,8 @@ void InsereListaPagina(ListaPagina* lista, Pagina* pag);
 
 void RemoveListaPagina(ListaPagina* lista, char* chave);
 
+Pagina* RetornaPagina(ListaPagina* lista, char* chave);
+
 ListaContribuicao* RetornaListaContribuicaoPagina(ListaPagina* lista, char* chave);
 
 ListaLink* RetornaListaLinkPagina(ListaPagina* lista, char* chave);

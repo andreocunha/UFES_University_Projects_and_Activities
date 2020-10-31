@@ -55,6 +55,14 @@ char* RetornaTextoContribuicao(Contribuicao* contrib){
     return contrib->texto;
 }
 
+char* RetornaArquivoContribuicao(Contribuicao* contrib){
+    return contrib->arquivo;
+}
+
+Editor* RetornaEditorContribuicao(Contribuicao* contrib){
+    return contrib->editor;
+}
+
 void DestroiContribuicao(Contribuicao* contrib){
     free(contrib->texto);
     free(contrib->arquivo);

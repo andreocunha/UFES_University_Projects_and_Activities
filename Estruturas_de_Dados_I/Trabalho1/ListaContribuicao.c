@@ -46,22 +46,24 @@ void InsereListaContribuicao(ListaContribuicao* lista, Contribuicao* contrib)
 }
 
 
-Contribuicao* RemoveListaContribuicao(ListaContribuicao* lista, char* chave)
+void RemoveListaContribuicao(ListaContribuicao* lista, char* chave)
 {
     CelulaContribuicao* p = lista->prim;
-    Contribuicao* contrib;
     CelulaContribuicao* ant = NULL;
 
     for (p = lista->prim; p!=NULL; p = p->prox) {
-        if (strcmp(RetornaTextoContribuicao (p->contrib), chave)== 0)
+        if (strcmp(RetornaArquivoContribuicao(p->contrib), chave)== 0)
         {
             break;
         }
         ant = p;
     }
 
-    // Atribui a Contribuicao de retorno
-    contrib = p->contrib;
+    if(p == NULL)
+    {
+        printf("ERRO: não existe a contribuicao %s\n", chave);
+        return;
+    }
 
     // se for o unico
     if(p == lista->prim && p == lista->ult)
@@ -82,14 +84,30 @@ Contribuicao* RemoveListaContribuicao(ListaContribuicao* lista, char* chave)
         ant->prox = p->prox;
     }
     
+    DestroiContribuicao(p->contrib);
     free(p);
 
-    return contrib;
+}
+
+
+Contribuicao* RetornaContribuicaoLista(ListaContribuicao* lista, char* chave)
+{
+    CelulaContribuicao* p = lista->prim;
+
+    for (p = lista->prim; p!=NULL; p = p->prox) {
+        if (strcmp(RetornaArquivoContribuicao (p->contrib), chave)== 0)
+        {
+            return p->contrib;
+        }
+    }
+    return NULL;
 }
 
 void ImprimeListaContribuicao(ListaContribuicao* lista)
 {
     CelulaContribuicao* p;
+
+    printf("CONTRIBUICOES: \n");
 
     for (p = lista->prim; p != NULL; p = p->prox)
     {
@@ -106,6 +124,7 @@ void DestroiListaContribuicao(ListaContribuicao* lista)
     {
         temp = p;
         p = p->prox;
+        DestroiContribuicao(temp->contrib);
         free(temp);
     }
     free(lista);

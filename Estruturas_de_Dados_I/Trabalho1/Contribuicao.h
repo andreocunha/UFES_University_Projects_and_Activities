@@ -9,6 +9,8 @@ typedef struct contribuicao Contribuicao;
 Contribuicao* InicializaContribuicao (char* texto, char* arq, Editor* ed);
 void ImprimeContribuicao(Contribuicao* contrib);
 char* RetornaTextoContribuicao(Contribuicao* contrib);
+char* RetornaArquivoContribuicao(Contribuicao* contrib);
+Editor* RetornaEditorContribuicao(Contribuicao* contrib);
 void DestroiContribuicao(Contribuicao* contrib);
 
 

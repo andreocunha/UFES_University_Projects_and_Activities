@@ -44,8 +44,8 @@ Pagina* InicializaPagina (char* nome, char* arquivo)
 
 void ImprimePagina(Pagina* pag)
 {
-    printf("%s\n", pag->nome);
-    printf("%s\n", pag->arquivo);
+    printf("NOME DA PAGINA: %s\n", pag->nome);
+    // printf("%s\n", pag->arquivo);
 }
 
 

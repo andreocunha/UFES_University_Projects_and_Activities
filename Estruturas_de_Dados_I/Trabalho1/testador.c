@@ -11,83 +11,18 @@
 void INSEREPAGINA(FILE *arq, ListaPagina* lista);
 void RETIRAPAGINA(FILE *arq, ListaPagina* lista);
 void INSEREEDITOR(FILE *arq, ListaEditor* lista);
-void INSERECONTRIBUICAO(FILE *arq, ListaPagina* lista);
-void RETIRACONTRIBUICAO(FILE *arq, ListaPagina* lista);
+void INSERECONTRIBUICAO(FILE *arq, ListaPagina* lista, ListaEditor* listaEditor);
+void RETIRACONTRIBUICAO(FILE *arq, ListaPagina* listaPagina, ListaEditor* listaEditor);
 void INSERELINK(FILE *arq, ListaPagina* lista);
 void RETIRALINK(FILE *arq, ListaPagina* lista);
 void CAMINHO(FILE *arq, ListaPagina* lista);
 void IMPRIMEPAGINA(FILE *arq, ListaPagina* lista);
-void IMPRIMEWIKED(FILE *arq, ListaPagina* lista);
+void IMPRIMEWIKED(ListaPagina* listaPagina, ListaEditor* listaEditor);
 
 
 int
 main(int argc, char *argv[])
 {
-
-    // Teste para os editores
-    // Editor* andre = InicializaEditor("Andre");
-    // Editor* artur = InicializaEditor("Artur");
-    // Editor* patricia = InicializaEditor("Patricia");
-    
-    // ListaEditor* listaEditor = InicializaListaEditor();
-    // InsereListaEditor(listaEditor, andre);
-    // InsereListaEditor(listaEditor, artur);
-    // InsereListaEditor(listaEditor, patricia);
-
-    // ImprimeListaEditor(listaEditor);
-
-    // printf("\n");
-
-    // RemoveListaEditor(listaEditor, "Andre");
-
-    // ImprimeListaEditor(listaEditor);
-    // printf("\n");
-
-    // DestroiListaEditor(listaEditor);
-    // DestroiEditor(andre);
-    // DestroiEditor(artur);
-    // DestroiEditor(patricia);
-
-
-
-
-    // Teste para as paginas
-    // Pagina* fisica = InicializaPagina("fisica", "fisica.txt");
-    // Pagina* artes = InicializaPagina("artes", "artes.txt");
-    // Pagina* ufes = InicializaPagina("ufes", "artes.txt");
-
-    // Contribuicao* contribuicao1 = InicializaContribuicao("contribuicao1111", "c4.txt", andre);
-    // Contribuicao* contribuicao2 = InicializaContribuicao("contribuicao2");
-    // Contribuicao* contribuicao3 = InicializaContribuicao("contribuicao3");
-    
-    // InsereListaContribuicao(RetornaListaContribuicaoPagina(fisica, "fisica"), contribuicao1);
-    // InsereListaContribuicao(RetornaContribuicaoPagina(fisica), contribuicao2);
-    // InsereListaContribuicao(RetornaContribuicaoPagina(fisica), contribuicao3);
-    
-    // ListaPagina* listaPagina = InicializaListaPagina();
-    // InsereListaPagina(listaPagina, fisica);
-    // InsereListaPagina(listaPagina, artes);
-    // InsereListaPagina(listaPagina, ufes);
-
-    // InsereListaContribuicao(RetornaListaContribuicaoPagina(listaPagina, "fisica"), contribuicao1);
-
-    // InsereListaLink(RetornaLinkPagina(fisica), ufes);
-    
-
-    // ImprimeListaPagina(listaPagina);
-    // RemoveListaPagina(listaPagina, "artes");
-
-    // printf("\n");
-    
-
-    // DestroiListaPagina(listaPagina);
-    // DestroiPagina(fisica);
-    // DestroiPagina(artes);
-    // DestroiPagina(ufes);
-    // DestroiContribuicao(contribuicao1);
-    // DestroiContribuicao(contribuicao2);
-    // DestroiContribuicao(contribuicao3);
-
     ListaPagina* listaPagina = InicializaListaPagina();
     ListaEditor* listaEditor = InicializaListaEditor();
 
@@ -143,15 +78,15 @@ main(int argc, char *argv[])
     }
     else if(strcmp(palavra, "INSERECONTRIBUICAO")== 0)
     {
-        
+        INSERECONTRIBUICAO(arq, listaPagina, listaEditor);
     }
     else if(strcmp(palavra, "RETIRACONTRIBUICAO")== 0)
     {
-        
+        RETIRACONTRIBUICAO(arq, listaPagina, listaEditor);
     }
     else if(strcmp(palavra, "INSERELINK")== 0)
     {
-        
+        INSERELINK(arq, listaPagina);
     }
     else if(strcmp(palavra, "RETIRALINK")== 0)
     {
@@ -163,18 +98,16 @@ main(int argc, char *argv[])
     }
     else if(strcmp(palavra, "IMPRIMEPAGINA")== 0)
     {
-        
+        IMPRIMEPAGINA(arq, listaPagina);
     }
     else if(strcmp(palavra, "IMPRIMEWIKED")== 0)
     {
-        ImprimeListaPagina(listaPagina);
-        ImprimeListaEditor(listaEditor);
+        IMPRIMEWIKED(listaPagina, listaEditor);
     }
     else if(strcmp(palavra, "FIM")== 0)
     {
         DestroiListaPagina(listaPagina);
         DestroiListaEditor(listaEditor);
-        printf("Chegou aqui\n");
         break;
     }
 
@@ -199,8 +132,6 @@ void INSEREPAGINA(FILE *arq, ListaPagina* lista)
     Pagina* nova = InicializaPagina(nomePag, nomeArq);
     InsereListaPagina(lista, nova);
 
-    printf("Passou aqui\n");
-
 }
 
 void RETIRAPAGINA(FILE *arq, ListaPagina* lista)
@@ -221,26 +152,103 @@ void INSEREEDITOR(FILE *arq, ListaEditor* lista)
     InsereListaEditor(lista, editor);
 }
 
-void INSERECONTRIBUICAO(FILE *arq, ListaPagina* lista)
+void INSERECONTRIBUICAO(FILE *arq, ListaPagina* listaPagina, ListaEditor* listaEditor)
 {
     Contribuicao* contrib;
+    Editor* ed;
 
-    // contrib = InicializaContribuicao();
+    char nomePag[50];
+    char nomeEditor[50];
+    char nomeArq[50];
+    char texto[10000];
+    char caminho[50] = "./Entradas/";
+
+    fscanf(arq,"%s",nomePag);
+    fscanf(arq,"%s",nomeEditor);
+    fscanf(arq,"%s",nomeArq);
+
+    FILE *arq2;
+    texto[0] = '\0';
+
+    strcat(caminho, nomeArq);
+    arq2 = fopen(caminho, "r");
+
+    if (arq2 == NULL) // Pode-se fazer o teste dessa forma
+    {
+        printf("Erro na abertura do arquivo");
+        exit(1);
+    }
+
+    while( !feof(arq2)) {
+		fgets(texto, 10000, arq2);
+	}
+    fclose(arq2);
+
+    ed = RetornaEditor(listaEditor, nomeEditor);
+
+    contrib = InicializaContribuicao(texto, nomeArq, ed);
+
+    InsereListaContribuicao(RetornaListaContribuicaoPagina(listaPagina, nomePag), contrib);
+
 }
 
-void RETIRACONTRIBUICAO(FILE *arq, ListaPagina* lista)
+void RETIRACONTRIBUICAO(FILE *arq, ListaPagina* listaPagina, ListaEditor* listaEditor)
 {
+    Contribuicao* contrib;
+    ListaContribuicao* listaContrib;
+    Editor* ed;
+    
+    char nomePag[50];
+    char nomeEditor[50];
+    char nomeArq[50];
+
+    fscanf(arq,"%s",nomePag);
+    fscanf(arq,"%s",nomeEditor);
+    fscanf(arq,"%s",nomeArq);
+
+    ed = RetornaEditor(listaEditor, nomeEditor);
+    listaContrib = RetornaListaContribuicaoPagina(listaPagina, nomePag);
+    contrib = RetornaContribuicaoLista(listaContrib, nomeArq);
+
+    if(RetornaEditorContribuicao(contrib) != ed)
+    {
+        printf("Esse usuario nao tem permissao de remover essa contribuicao\n");
+        return;
+    }
+    RemoveListaContribuicao(listaContrib, nomeArq);
 
 }
 
 void INSERELINK(FILE *arq, ListaPagina* lista)
 {
+    ListaLink* listaLink;
+    Pagina* pag;
 
+    char origem[50];
+    char destino[50];
+
+    fscanf(arq,"%s",origem);
+    fscanf(arq,"%s",destino);
+
+    listaLink = RetornaListaLinkPagina(lista, origem);
+
+    pag = RetornaPagina(lista, destino);
+    InsereListaLink(listaLink, pag);
 }
 
 void RETIRALINK(FILE *arq, ListaPagina* lista)
 {
+    ListaLink* listaLink;
 
+    char origem[50];
+    char destino[50];
+
+    fscanf(arq,"%s",origem);
+    fscanf(arq,"%s",destino);
+
+    listaLink = RetornaListaLinkPagina(lista, origem);
+
+    RemoveListaLink(listaLink, destino);
 }
 
 void CAMINHO(FILE *arq, ListaPagina* lista)
@@ -250,10 +258,16 @@ void CAMINHO(FILE *arq, ListaPagina* lista)
 
 void IMPRIMEPAGINA(FILE *arq, ListaPagina* lista)
 {
+    Pagina* pag;
+    char nomePag[50];
 
+    fscanf(arq,"%s",nomePag);
+    pag = RetornaPagina(lista, nomePag);
+    ImprimePagina(pag);
 }
 
-void IMPRIMEWIKED(FILE *arq, ListaPagina* lista)
+void IMPRIMEWIKED(ListaPagina* listaPagina, ListaEditor* listaEditor)
 {
-
+    ImprimeListaPagina(listaPagina);
+    ImprimeListaEditor(listaEditor);
 }

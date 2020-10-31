@@ -11,7 +11,9 @@ ListaContribuicao* InicializaListaContribuicao (void);
 
 void InsereListaContribuicao(ListaContribuicao* lista, Contribuicao* contrib);
 
-Contribuicao* RemoveListaContribuicao(ListaContribuicao* lista, char* chave);
+void RemoveListaContribuicao(ListaContribuicao* lista, char* chave);
+
+Contribuicao* RetornaContribuicaoLista(ListaContribuicao* lista, char* chave);
 
 void ImprimeListaContribuicao(ListaContribuicao* lista);
 

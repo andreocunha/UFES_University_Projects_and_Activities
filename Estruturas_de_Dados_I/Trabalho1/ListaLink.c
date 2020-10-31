@@ -90,7 +90,7 @@ void ImprimeListaLink(ListaLink* lista)
 {
     CelulaLink* p;
 
-    printf("Links:\n");
+    printf("LISTA DE LINKS:\n");
 
     for (p = lista->prim; p != NULL; p = p->prox)
     {

@@ -96,7 +96,7 @@ void RemoveListaPagina(ListaPagina* lista, char* chave)
     
 }
 
-static CelulaPagina* RetornaPagina(ListaPagina* lista ,char* chave)
+static CelulaPagina* RetornaCelulaPagina(ListaPagina* lista ,char* chave)
 {
     CelulaPagina* p = lista->prim;
 
@@ -109,15 +109,21 @@ static CelulaPagina* RetornaPagina(ListaPagina* lista ,char* chave)
     return NULL;
 }
 
+Pagina* RetornaPagina(ListaPagina* lista, char* chave)
+{
+    CelulaPagina* pag = RetornaCelulaPagina(lista, chave);
+    return pag->pag;
+}
+
 ListaContribuicao* RetornaListaContribuicaoPagina(ListaPagina* lista, char* chave)
 {
-    CelulaPagina* pag = RetornaPagina(lista, chave);
+    CelulaPagina* pag = RetornaCelulaPagina(lista, chave);
     return pag->contrib;
 }
 
 ListaLink* RetornaListaLinkPagina(ListaPagina* lista, char* chave)
 {
-    CelulaPagina* pag = RetornaPagina(lista, chave);
+    CelulaPagina* pag = RetornaCelulaPagina(lista, chave);
     return pag->link;
 }
 
