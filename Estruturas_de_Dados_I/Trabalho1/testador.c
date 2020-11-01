@@ -6,16 +6,17 @@
 #include "ListaPagina.h"
 #include "ListaContribuicao.h"
 #include "ListaLink.h"
+#include "ListaHistorico.h"
 
 
 void INSEREPAGINA(FILE *arq, ListaPagina* lista);
-void RETIRAPAGINA(FILE *arq, ListaPagina* lista);
+void RETIRAPAGINA(FILE* arq, FILE* log, ListaPagina* lista);
 void INSEREEDITOR(FILE *arq, ListaEditor* lista);
 void INSERECONTRIBUICAO(FILE *arq, ListaPagina* lista, ListaEditor* listaEditor);
 void RETIRACONTRIBUICAO(FILE *arq, ListaPagina* listaPagina, ListaEditor* listaEditor);
 void INSERELINK(FILE *arq, ListaPagina* lista);
 void RETIRALINK(FILE *arq, ListaPagina* lista);
-void CAMINHO(FILE *arq, ListaPagina* lista);
+void CAMINHO(FILE* arq, FILE* log, ListaPagina* lista);
 void IMPRIMEPAGINA(FILE *arq, ListaPagina* lista);
 void IMPRIMEWIKED(ListaPagina* listaPagina, ListaEditor* listaEditor);
 
@@ -32,9 +33,9 @@ main(int argc, char *argv[])
     char c = '@';
     palavra[0] = '\0';
 
-    arq = fopen("./Entradas/entrada.txt", "r");
-    log = fopen("./Saidas/log.txt", "w");
-    fclose(log);
+    arq = fopen(argv[1], "r");
+    log = fopen("log.txt", "w");
+    
 
     if (arq == NULL)
     {
@@ -72,7 +73,7 @@ main(int argc, char *argv[])
     }
     else if(strcmp(palavra, "RETIRAPAGINA")== 0)
     {
-        RETIRAPAGINA(arq, listaPagina);
+        RETIRAPAGINA(arq, log, listaPagina);
     }
     else if(strcmp(palavra, "INSEREEDITOR")== 0)
     {
@@ -96,7 +97,7 @@ main(int argc, char *argv[])
     }
     else if(strcmp(palavra, "CAMINHO")== 0)
     {
-        
+        CAMINHO(arq, log, listaPagina);
     }
     else if(strcmp(palavra, "IMPRIMEPAGINA")== 0)
     {
@@ -119,6 +120,7 @@ main(int argc, char *argv[])
     } while (c != EOF);
     
     fclose(arq);
+    fclose(log);
 
     return 0;
 }
@@ -136,12 +138,12 @@ void INSEREPAGINA(FILE *arq, ListaPagina* lista)
 
 }
 
-void RETIRAPAGINA(FILE *arq, ListaPagina* lista)
+void RETIRAPAGINA(FILE* arq, FILE* log, ListaPagina* lista)
 {
     char nomePag[50];
     fscanf(arq,"%s",nomePag);
 
-    RemoveListaPagina(lista, nomePag);
+    RemoveListaPagina(lista, nomePag, log);
 }
 
 void INSEREEDITOR(FILE *arq, ListaEditor* lista)
@@ -157,6 +159,7 @@ void INSEREEDITOR(FILE *arq, ListaEditor* lista)
 void INSERECONTRIBUICAO(FILE *arq, ListaPagina* listaPagina, ListaEditor* listaEditor)
 {
     Contribuicao* contrib;
+    Historico* hist;
     Editor* ed;
 
     char nomePag[50];
@@ -200,8 +203,11 @@ void INSERECONTRIBUICAO(FILE *arq, ListaPagina* listaPagina, ListaEditor* listaE
     ed = RetornaEditor(listaEditor, nomeEditor);
 
     contrib = InicializaContribuicao(texto, nomeArq);
+    hist = InicializaHistorico(nomeEditor, nomeArq);
 
     InsereListaContribuicao(RetornaListaContribuicaoPagina(listaPagina, nomePag), contrib, ed);
+    InsereListaHistorico(RetornaListaHistoricoPagina(listaPagina, nomePag), hist);
+    // InsereContribuicaoListaEditor(listaEditor, contrib, nomeEditor);
 
 }
 
@@ -229,7 +235,6 @@ void RETIRACONTRIBUICAO(FILE *arq, ListaPagina* listaPagina, ListaEditor* listaE
         return;
     }
     RemoveListaContribuicao(listaContrib, nomeArq);
-
 }
 
 void INSERELINK(FILE *arq, ListaPagina* lista)
@@ -264,8 +269,30 @@ void RETIRALINK(FILE *arq, ListaPagina* lista)
     RemoveListaLink(listaLink, destino);
 }
 
-void CAMINHO(FILE *arq, ListaPagina* lista)
+void CAMINHO(FILE* arq, FILE* log, ListaPagina* lista)
 {
+    ListaLink* listaLink;
+    Pagina* pagDestino;
+
+
+    char origem[50];
+    char destino[50];
+
+    fscanf(arq,"%s",origem);
+    fscanf(arq,"%s",destino);
+
+    listaLink = RetornaListaLinkPagina(lista, origem);
+    pagDestino = RetornaPaginaListaLink(listaLink, destino);
+
+    if(pagDestino == NULL)
+    {
+        fprintf(log, "NAO HA CAMINHO DA PAGINA %s PARA %s\n", origem, destino);
+    }
+    else
+    {
+        fprintf(log, "HA CAMINHO DA PAGINA %s PARA %s\n", origem, destino);
+    }
+    
 
 }
 
@@ -276,7 +303,7 @@ void IMPRIMEPAGINA(FILE *arq, ListaPagina* lista)
 
     fscanf(arq,"%s",nomePag);
     pag = RetornaPagina(lista, nomePag);
-    ImprimePagina(pag);
+    ImprimeUnicaPaginaLista(lista, pag);
 }
 
 void IMPRIMEWIKED(ListaPagina* listaPagina, ListaEditor* listaEditor)

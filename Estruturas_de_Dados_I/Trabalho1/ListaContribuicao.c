@@ -1,7 +1,4 @@
 #include "ListaContribuicao.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 
 struct celulaContribuicao
@@ -106,18 +103,31 @@ Contribuicao* RetornaContribuicaoLista(ListaContribuicao* lista, char* chave)
     return NULL;
 }
 
-void ImprimeListaContribuicao(ListaContribuicao* lista)
+void ImprimeListaContribuicao(ListaContribuicao* lista, FILE* arq)
 {
     CelulaContribuicao* p;
     Editor* ed;
 
-    printf("CONTRIBUICOES: \n");
+    printf("--> Textos\n");
+    fprintf(arq, "--> Textos\n");
 
     for (p = lista->prim; p != NULL; p = p->prox)
     {
         ed = RetornaEditorListaContribuicao(lista, p->contrib);
         printf("\n-------- %s (%s) --------\n\n", RetornaArquivoContribuicao(p->contrib), RetornaNomeEditor(ed));
-        ImprimeContribuicao(p->contrib);
+        fprintf(arq, "\n-------- %s (%s) --------\n\n", RetornaArquivoContribuicao(p->contrib), RetornaNomeEditor(ed));
+        ImprimeContribuicao(p->contrib, arq);
+    }
+}
+
+
+void ImprimeListaContribuicaoEditor(ListaContribuicao* lista)
+{
+    CelulaContribuicao* p;
+
+    for (p = lista->prim; p != NULL; p = p->prox)
+    {
+        printf("%s ", RetornaArquivoContribuicao(p->contrib));
     }
 }
 

@@ -135,7 +135,16 @@ void ImprimeListaEditor(ListaEditor* lista)
     for (p = lista->prim; p != NULL; p = p->prox)
     {
         ImprimeEditor(p->ed);
+        // printf("Contribuicoes do: %s\n", RetornaNomeEditor(p->ed));
+        // ImprimeListaContribuicaoEditor(p->contrib);
+        // printf("\n");
     }
+}
+
+ListaContribuicao* RetornaListaContribuicaoEditor(ListaEditor* lista, char* chave)
+{
+    CelulaEditor* p = RetornaCelulaEditor(lista, chave);
+    return p->contrib;
 }
 
 void DestroiListaEditor(ListaEditor* lista)

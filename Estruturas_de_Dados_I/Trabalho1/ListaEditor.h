@@ -17,6 +17,8 @@ void RemoveListaEditor(ListaEditor* lista, char* chave);
 
 void InsereContribuicaoListaEditor(ListaEditor* lista, Contribuicao* contrib, char* chave);
 
+ListaContribuicao* RetornaListaContribuicaoEditor(ListaEditor* lista, char* chave);
+
 void ImprimeListaEditor(ListaEditor* lista);
 
 void DestroiListaEditor(ListaEditor* lista);

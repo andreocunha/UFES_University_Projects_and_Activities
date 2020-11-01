@@ -7,9 +7,6 @@
  ***************************************************************************/
 
 #include "Pagina.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 
 struct pagina 
@@ -42,15 +39,20 @@ Pagina* InicializaPagina (char* nome, char* arquivo)
     return pagina;
 }
 
-void ImprimePagina(Pagina* pag)
+void ImprimePagina(Pagina* pag, FILE *arq)
 {
-    printf("NOME DA PAGINA: %s\n", pag->nome);
+    printf("%s\n\n", pag->nome);
+    fprintf(arq,"%s\n\n", pag->nome);
     // printf("%s\n", pag->arquivo);
 }
 
 
 char* RetornaNomePagina(Pagina* pag){
     return pag->nome;
+}
+
+char* RetornaNomeArquivo(Pagina* pag){
+    return pag->arquivo;
 }
 
 void DestroiPagina(Pagina* pag){

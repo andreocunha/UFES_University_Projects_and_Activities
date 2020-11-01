@@ -1,6 +1,9 @@
 #ifndef ListaContribuicao_h
 #define ListaContribuicao_h
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "Contribuicao.h"
 #include "Editor.h"
 
@@ -18,7 +21,9 @@ Contribuicao* RetornaContribuicaoLista(ListaContribuicao* lista, char* chave);
 
 Editor* RetornaEditorListaContribuicao(ListaContribuicao* lista, Contribuicao* contrib);
 
-void ImprimeListaContribuicao(ListaContribuicao* lista);
+void ImprimeListaContribuicao(ListaContribuicao* lista, FILE* arq);
+
+void ImprimeListaContribuicaoEditor(ListaContribuicao* lista);
 
 void DestroiListaContribuicao(ListaContribuicao* lista);
 

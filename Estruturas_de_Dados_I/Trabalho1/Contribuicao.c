@@ -7,9 +7,6 @@
  ***************************************************************************/
 
 #include "Contribuicao.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 
 struct contribuicao 
@@ -41,9 +38,10 @@ Contribuicao* InicializaContribuicao (char* texto, char* arq)
     return contrib;
 }
 
-void ImprimeContribuicao(Contribuicao* contrib)
+void ImprimeContribuicao(Contribuicao* contrib, FILE* arq)
 {
     printf("%s\n", contrib->texto);
+    fprintf(arq, "%s\n", contrib->texto);
 }
 
 
@@ -56,7 +54,12 @@ char* RetornaArquivoContribuicao(Contribuicao* contrib){
 }
 
 void DestroiContribuicao(Contribuicao* contrib){
-    free(contrib->texto);
-    free(contrib->arquivo);
-    free(contrib);
+
+    if(contrib != NULL)
+    {
+        free(contrib->texto);
+        free(contrib->arquivo);
+        free(contrib);
+    }
+    
 }

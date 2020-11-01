@@ -1,7 +1,4 @@
 #include "ListaPagina.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 
 struct celulaPagina
@@ -10,6 +7,7 @@ struct celulaPagina
     CelulaPagina* prox;
     ListaContribuicao* contrib;
     ListaLink* link;
+    ListaHistorico* hist;
 };
 
 
@@ -36,6 +34,7 @@ void InsereListaPagina(ListaPagina* lista, Pagina* pag)
 
     nova->contrib = InicializaListaContribuicao();
     nova->link = InicializaListaLink();
+    nova->hist = InicializaListaHistorico();
 
     if(lista->prim == NULL && lista->ult == NULL)
     {
@@ -50,7 +49,7 @@ void InsereListaPagina(ListaPagina* lista, Pagina* pag)
 }
 
 
-void RemoveListaPagina(ListaPagina* lista, char* chave)
+void RemoveListaPagina(ListaPagina* lista, char* chave, FILE* log)
 {
     CelulaPagina* p;
     CelulaPagina* ant = NULL;
@@ -65,10 +64,7 @@ void RemoveListaPagina(ListaPagina* lista, char* chave)
 
     if(p == NULL)
     {
-        FILE* log;
-        log = fopen("./Saidas/log.txt", "w");
         fprintf(log,"ERRO: não existe a pagina %s\n", chave);
-        fclose(log);
         printf("ERRO: não existe a pagina %s\n", chave);
         return;
     }
@@ -95,6 +91,7 @@ void RemoveListaPagina(ListaPagina* lista, char* chave)
 
     DestroiListaContribuicao(p->contrib);
     DestroiListaLink(p->link);
+    DestroiListaHistorico(p->hist);
     DestroiPagina(p->pag);
     free(p); 
     
@@ -116,6 +113,10 @@ static CelulaPagina* RetornaCelulaPagina(ListaPagina* lista ,char* chave)
 Pagina* RetornaPagina(ListaPagina* lista, char* chave)
 {
     CelulaPagina* pag = RetornaCelulaPagina(lista, chave);
+    if(pag == NULL)
+    {
+        return NULL;
+    }
     return pag->pag;
 }
 
@@ -131,18 +132,53 @@ ListaLink* RetornaListaLinkPagina(ListaPagina* lista, char* chave)
     return pag->link;
 }
 
+ListaHistorico* RetornaListaHistoricoPagina(ListaPagina* lista, char* chave)
+{
+    CelulaPagina* pag = RetornaCelulaPagina(lista, chave);
+    return pag->hist;
+}
+
 void ImprimeListaPagina(ListaPagina* lista)
 {
     CelulaPagina* p;
 
     for (p = lista->prim; p != NULL; p = p->prox)
     {
-        ImprimePagina(p->pag);
-        ImprimeListaContribuicao(p->contrib);
-        ImprimeListaLink(p->link);
+        FILE* arq;
+        arq = fopen(RetornaNomeArquivo(p->pag), "w");  
+
+        ImprimePagina(p->pag, arq);
+        ImprimeListaHistorico(p->hist, arq);
+        ImprimeListaLink(p->link, arq);
+        ImprimeListaContribuicao(p->contrib, arq);
 
         printf("\n");
+        fclose(arq);
     }
+}
+
+void ImprimeUnicaPaginaLista(ListaPagina* lista, Pagina* pag)
+{
+    CelulaPagina* p;
+
+    FILE* arq;
+    arq = fopen(RetornaNomeArquivo(pag), "w");    
+
+    for (p = lista->prim; p != NULL; p = p->prox)
+    {
+        if(p->pag == pag)
+        {
+            ImprimePagina(p->pag, arq);
+            ImprimeListaHistorico(p->hist, arq);
+            ImprimeListaLink(p->link, arq);
+            ImprimeListaContribuicao(p->contrib, arq);
+
+            printf("\n");
+            fclose(arq);
+            return;
+        }
+    }
+
 }
 
 void DestroiListaPagina(ListaPagina* lista)
@@ -157,6 +193,7 @@ void DestroiListaPagina(ListaPagina* lista)
         DestroiPagina(temp->pag);
         DestroiListaContribuicao(temp->contrib);
         DestroiListaLink(temp->link);
+        DestroiListaHistorico(temp->hist);
         free(temp);
     }
     free(lista);

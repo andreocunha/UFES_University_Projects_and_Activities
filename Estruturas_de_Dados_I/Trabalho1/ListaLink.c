@@ -1,7 +1,4 @@
 #include "ListaLink.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 
 struct celulaLink
@@ -86,16 +83,44 @@ void RemoveListaLink(ListaLink* lista, char* chave)
 
 }
 
-void ImprimeListaLink(ListaLink* lista)
+void ImprimeListaLink(ListaLink* lista, FILE* arq)
 {
     CelulaLink* p;
 
-    printf("LISTA DE LINKS:\n");
+    printf("--> Links\n");
+    fprintf(arq, "--> Links\n");
 
     for (p = lista->prim; p != NULL; p = p->prox)
     {
-        printf("%s\n", RetornaNomePagina(p->pag));
+        printf("%s %s\n", RetornaNomePagina(p->pag), RetornaNomeArquivo(p->pag));
+        fprintf(arq, "%s %s\n", RetornaNomePagina(p->pag), RetornaNomeArquivo(p->pag));
     }
+    printf("\n");
+    fprintf(arq, "\n");
+}
+
+static CelulaLink* RetornaCelulaLink(ListaLink* lista ,char* chave)
+{
+    CelulaLink* p = lista->prim;
+
+    for (p = lista->prim; p!=NULL; p = p->prox) {
+        if (strcmp(RetornaNomePagina (p->pag), chave)== 0)
+        {
+            return p;
+        }
+    }
+    return NULL;
+}
+
+
+Pagina* RetornaPaginaListaLink(ListaLink* lista, char* chave)
+{
+    CelulaLink* link = RetornaCelulaLink(lista, chave);
+    if(link == NULL)
+    {
+        return NULL;
+    }
+    return link->pag;
 }
 
 void DestroiListaLink(ListaLink* lista)
