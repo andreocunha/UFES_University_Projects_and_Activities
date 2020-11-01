@@ -27,13 +27,16 @@ main(int argc, char *argv[])
     ListaEditor* listaEditor = InicializaListaEditor();
 
     FILE *arq;
+    FILE *log;
     char palavra[50];
     char c = '@';
     palavra[0] = '\0';
 
     arq = fopen("./Entradas/entrada.txt", "r");
+    log = fopen("./Saidas/log.txt", "w");
+    fclose(log);
 
-    if (arq == NULL) // Pode-se fazer o teste dessa forma
+    if (arq == NULL)
     {
         printf("Erro na abertura do arquivo");
         exit(1);
@@ -44,7 +47,6 @@ main(int argc, char *argv[])
         fscanf(arq, "%c", &c);
     }
     
-    // fscanf(arq,"%s",palavra);
 
     palavra[0] = c;
     for(int i = 1; c!= ' '; i++)
@@ -162,6 +164,7 @@ void INSERECONTRIBUICAO(FILE *arq, ListaPagina* listaPagina, ListaEditor* listaE
     char nomeArq[50];
     char texto[10000];
     char caminho[50] = "./Entradas/";
+    char c;
 
     fscanf(arq,"%s",nomePag);
     fscanf(arq,"%s",nomeEditor);
@@ -169,6 +172,11 @@ void INSERECONTRIBUICAO(FILE *arq, ListaPagina* listaPagina, ListaEditor* listaE
 
     FILE *arq2;
     texto[0] = '\0';
+    for (int j = 0; j < 10000; j++)
+    {
+        texto[j] = '\0';
+    }
+    
 
     strcat(caminho, nomeArq);
     arq2 = fopen(caminho, "r");
@@ -179,16 +187,21 @@ void INSERECONTRIBUICAO(FILE *arq, ListaPagina* listaPagina, ListaEditor* listaE
         exit(1);
     }
 
+    int i = 0;
     while( !feof(arq2)) {
-		fgets(texto, 10000, arq2);
+		// fgets(texto, 10000, arq2);
+        c = fgetc(arq2);
+        texto[i] = c;
+        i++;
 	}
+    texto[i-1] = '\0';
     fclose(arq2);
 
     ed = RetornaEditor(listaEditor, nomeEditor);
 
-    contrib = InicializaContribuicao(texto, nomeArq, ed);
+    contrib = InicializaContribuicao(texto, nomeArq);
 
-    InsereListaContribuicao(RetornaListaContribuicaoPagina(listaPagina, nomePag), contrib);
+    InsereListaContribuicao(RetornaListaContribuicaoPagina(listaPagina, nomePag), contrib, ed);
 
 }
 
@@ -210,7 +223,7 @@ void RETIRACONTRIBUICAO(FILE *arq, ListaPagina* listaPagina, ListaEditor* listaE
     listaContrib = RetornaListaContribuicaoPagina(listaPagina, nomePag);
     contrib = RetornaContribuicaoLista(listaContrib, nomeArq);
 
-    if(RetornaEditorContribuicao(contrib) != ed)
+    if(RetornaEditorListaContribuicao(listaContrib, contrib) != ed)
     {
         printf("Esse usuario nao tem permissao de remover essa contribuicao\n");
         return;

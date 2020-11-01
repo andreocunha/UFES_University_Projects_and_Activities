@@ -2,6 +2,7 @@
 #define ListaContribuicao_h
 
 #include "Contribuicao.h"
+#include "Editor.h"
 
 typedef struct celulaContribuicao CelulaContribuicao;
 typedef struct listaContribuicao ListaContribuicao;
@@ -9,11 +10,13 @@ typedef struct listaContribuicao ListaContribuicao;
 
 ListaContribuicao* InicializaListaContribuicao (void);
 
-void InsereListaContribuicao(ListaContribuicao* lista, Contribuicao* contrib);
+void InsereListaContribuicao(ListaContribuicao* lista, Contribuicao* contrib, Editor* ed);
 
 void RemoveListaContribuicao(ListaContribuicao* lista, char* chave);
 
 Contribuicao* RetornaContribuicaoLista(ListaContribuicao* lista, char* chave);
+
+Editor* RetornaEditorListaContribuicao(ListaContribuicao* lista, Contribuicao* contrib);
 
 void ImprimeListaContribuicao(ListaContribuicao* lista);
 

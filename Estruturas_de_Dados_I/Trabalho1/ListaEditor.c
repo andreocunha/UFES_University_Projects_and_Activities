@@ -8,6 +8,7 @@ struct celulaEditor
 {
     Editor* ed;
     CelulaEditor* prox;
+    ListaContribuicao* contrib;
 };
 
 
@@ -29,6 +30,7 @@ ListaEditor* InicializaListaEditor (void)
 void InsereListaEditor(ListaEditor* lista, Editor* ed)
 {
     CelulaEditor* nova = (CelulaEditor*)malloc(sizeof(CelulaEditor));
+    nova->contrib = InicializaListaContribuicao(); // cria uma lista vazia
     nova->ed = ed;
     nova->prox = NULL;
 
@@ -103,6 +105,29 @@ void RemoveListaEditor(ListaEditor* lista, char* chave)
 
 }
 
+static CelulaEditor* RetornaCelulaEditor(ListaEditor* lista ,char* chave)
+{
+    CelulaEditor* p = lista->prim;
+
+    for (p = lista->prim; p!=NULL; p = p->prox) {
+        if (strcmp(RetornaNomeEditor (p->ed), chave)== 0)
+        {
+            return p;
+        }
+    }
+    return NULL;
+}
+
+void InsereContribuicaoListaEditor(ListaEditor* lista, Contribuicao* contrib, char* chave)
+{
+    CelulaEditor* p = RetornaCelulaEditor(lista, chave);
+    if(p == NULL){
+        printf("Esse editor nao existe...\n");
+        return;
+    }
+    InsereListaContribuicao(p->contrib, contrib, p->ed);
+}
+
 void ImprimeListaEditor(ListaEditor* lista)
 {
     CelulaEditor* p;
@@ -123,6 +148,7 @@ void DestroiListaEditor(ListaEditor* lista)
         temp = p;
         p = p->prox;
         DestroiEditor(temp->ed);
+        free(temp->contrib);
         free(temp);
     }
     free(lista);

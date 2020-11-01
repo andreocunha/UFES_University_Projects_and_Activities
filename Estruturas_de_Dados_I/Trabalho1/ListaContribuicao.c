@@ -8,6 +8,7 @@ struct celulaContribuicao
 {
     Contribuicao* contrib;
     CelulaContribuicao* prox;
+    Editor* editor;
 };
 
 
@@ -26,11 +27,13 @@ ListaContribuicao* InicializaListaContribuicao (void)
 }
 
 
-void InsereListaContribuicao(ListaContribuicao* lista, Contribuicao* contrib)
+void InsereListaContribuicao(ListaContribuicao* lista, Contribuicao* contrib, Editor* ed)
 {
     CelulaContribuicao* nova = (CelulaContribuicao*)malloc(sizeof(CelulaContribuicao));
     nova->contrib = contrib;
     nova->prox = NULL;
+    
+    nova->editor = ed;
 
     if(lista->prim == NULL && lista->ult == NULL)
     {
@@ -106,13 +109,30 @@ Contribuicao* RetornaContribuicaoLista(ListaContribuicao* lista, char* chave)
 void ImprimeListaContribuicao(ListaContribuicao* lista)
 {
     CelulaContribuicao* p;
+    Editor* ed;
 
     printf("CONTRIBUICOES: \n");
 
     for (p = lista->prim; p != NULL; p = p->prox)
     {
+        ed = RetornaEditorListaContribuicao(lista, p->contrib);
+        printf("\n-------- %s (%s) --------\n\n", RetornaArquivoContribuicao(p->contrib), RetornaNomeEditor(ed));
         ImprimeContribuicao(p->contrib);
     }
+}
+
+
+Editor* RetornaEditorListaContribuicao(ListaContribuicao* lista, Contribuicao* contrib)
+{
+    CelulaContribuicao* p = lista->prim;
+
+    for (p = lista->prim; p!=NULL; p = p->prox) {
+        if (p->contrib == contrib)
+        {
+            return p->editor;
+        }
+    }
+    return NULL;
 }
 
 void DestroiListaContribuicao(ListaContribuicao* lista)

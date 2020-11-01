@@ -16,10 +16,9 @@ struct contribuicao
 {
     char* texto;
     char* arquivo;
-    Editor* editor;
 };
 
-Contribuicao* InicializaContribuicao (char* texto, char* arq, Editor* ed) 
+Contribuicao* InicializaContribuicao (char* texto, char* arq) 
 {
     Contribuicao* contrib = (Contribuicao*)malloc(sizeof(Contribuicao));
 
@@ -39,14 +38,11 @@ Contribuicao* InicializaContribuicao (char* texto, char* arq, Editor* ed)
 
     contrib->texto = contribuicao_texto;
     contrib->arquivo = contribuicao_arq;
-    contrib->editor = ed;
-
     return contrib;
 }
 
 void ImprimeContribuicao(Contribuicao* contrib)
 {
-    printf("\n-------- %s (%s) --------\n\n", contrib->arquivo, RetornaNomeEditor(contrib->editor));
     printf("%s\n", contrib->texto);
 }
 
@@ -57,10 +53,6 @@ char* RetornaTextoContribuicao(Contribuicao* contrib){
 
 char* RetornaArquivoContribuicao(Contribuicao* contrib){
     return contrib->arquivo;
-}
-
-Editor* RetornaEditorContribuicao(Contribuicao* contrib){
-    return contrib->editor;
 }
 
 void DestroiContribuicao(Contribuicao* contrib){

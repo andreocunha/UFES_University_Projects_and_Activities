@@ -65,6 +65,10 @@ void RemoveListaPagina(ListaPagina* lista, char* chave)
 
     if(p == NULL)
     {
+        FILE* log;
+        log = fopen("./Saidas/log.txt", "w");
+        fprintf(log,"ERRO: não existe a pagina %s\n", chave);
+        fclose(log);
         printf("ERRO: não existe a pagina %s\n", chave);
         return;
     }
