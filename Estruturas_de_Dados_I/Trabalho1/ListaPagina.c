@@ -138,6 +138,16 @@ ListaHistorico* RetornaListaHistoricoPagina(ListaPagina* lista, char* chave)
     return pag->hist;
 }
 
+void RemoveLinkListaLinkListaPagina(ListaPagina* lista, char* chave)
+{
+    CelulaPagina* p;
+
+    for (p = lista->prim; p != NULL; p = p->prox)
+    {
+        RemoveListaLink(p->link, chave);
+    }
+}
+
 void ImprimeListaPagina(ListaPagina* lista)
 {
     CelulaPagina* p;

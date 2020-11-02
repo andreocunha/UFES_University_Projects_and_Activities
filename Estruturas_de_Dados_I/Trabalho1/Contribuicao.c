@@ -13,6 +13,7 @@ struct contribuicao
 {
     char* texto;
     char* arquivo;
+    char statusRetirado;
 };
 
 Contribuicao* InicializaContribuicao (char* texto, char* arq) 
@@ -35,15 +36,28 @@ Contribuicao* InicializaContribuicao (char* texto, char* arq)
 
     contrib->texto = contribuicao_texto;
     contrib->arquivo = contribuicao_arq;
+    contrib->statusRetirado = 'n';
     return contrib;
 }
 
 void ImprimeContribuicao(Contribuicao* contrib, FILE* arq)
 {
-    printf("%s\n", contrib->texto);
-    fprintf(arq, "%s\n", contrib->texto);
+    if(contrib->statusRetirado == 'n')
+    {
+        printf("%s\n", contrib->texto);
+        fprintf(arq, "%s\n", contrib->texto);
+    }
 }
 
+void AlteraStatusContribuicao(Contribuicao* contrib)
+{
+    contrib->statusRetirado = 's';
+}
+
+char RetornaStatusContribuicao(Contribuicao* contrib)
+{
+    return contrib->statusRetirado;
+}
 
 char* RetornaTextoContribuicao(Contribuicao* contrib){
     return contrib->texto;

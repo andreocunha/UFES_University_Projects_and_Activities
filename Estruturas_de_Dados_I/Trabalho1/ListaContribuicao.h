@@ -17,6 +17,8 @@ void InsereListaContribuicao(ListaContribuicao* lista, Contribuicao* contrib, Ed
 
 void RemoveListaContribuicao(ListaContribuicao* lista, char* chave);
 
+void RemoveCelulaListaContribuicao(ListaContribuicao* lista, char* chave);
+
 Contribuicao* RetornaContribuicaoLista(ListaContribuicao* lista, char* chave);
 
 Editor* RetornaEditorListaContribuicao(ListaContribuicao* lista, Contribuicao* contrib);
@@ -26,6 +28,8 @@ void ImprimeListaContribuicao(ListaContribuicao* lista, FILE* arq);
 void ImprimeListaContribuicaoEditor(ListaContribuicao* lista);
 
 void DestroiListaContribuicao(ListaContribuicao* lista);
+
+void DestroiCelulaListaContribuicao(ListaContribuicao* lista);
 
 
 #endif /* ListaContribuicao_h */

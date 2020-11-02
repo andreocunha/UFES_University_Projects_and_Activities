@@ -93,7 +93,7 @@ main(int argc, char *argv[])
     }
     else if(strcmp(palavra, "RETIRALINK")== 0)
     {
-        
+        RETIRALINK(arq, listaPagina);
     }
     else if(strcmp(palavra, "CAMINHO")== 0)
     {
@@ -144,6 +144,8 @@ void RETIRAPAGINA(FILE* arq, FILE* log, ListaPagina* lista)
     fscanf(arq,"%s",nomePag);
 
     RemoveListaPagina(lista, nomePag, log);
+
+    RemoveLinkListaLinkListaPagina(lista, nomePag);
 }
 
 void INSEREEDITOR(FILE *arq, ListaEditor* lista)
@@ -207,7 +209,7 @@ void INSERECONTRIBUICAO(FILE *arq, ListaPagina* listaPagina, ListaEditor* listaE
 
     InsereListaContribuicao(RetornaListaContribuicaoPagina(listaPagina, nomePag), contrib, ed);
     InsereListaHistorico(RetornaListaHistoricoPagina(listaPagina, nomePag), hist);
-    // InsereContribuicaoListaEditor(listaEditor, contrib, nomeEditor);
+    InsereContribuicaoListaEditor(listaEditor, contrib, nomeEditor);
 
 }
 
@@ -234,7 +236,11 @@ void RETIRACONTRIBUICAO(FILE *arq, ListaPagina* listaPagina, ListaEditor* listaE
         printf("Esse usuario nao tem permissao de remover essa contribuicao\n");
         return;
     }
-    RemoveListaContribuicao(listaContrib, nomeArq);
+    RemoveCelulaListaContribuicao(RetornaListaContribuicaoEditor(listaEditor, nomeEditor), nomeArq);
+    // RemoveListaContribuicao(listaContrib, nomeArq);
+    AlteraStatusContribuicao(contrib);
+    AlteraStatusHistorico(RetornaHistorico(RetornaListaHistoricoPagina(listaPagina, nomePag), nomeEditor));
+
 }
 
 void INSERELINK(FILE *arq, ListaPagina* lista)

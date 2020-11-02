@@ -15,6 +15,8 @@ void InsereListaHistorico(ListaHistorico* lista, Historico* hist);
 
 void ImprimeListaHistorico(ListaHistorico* lista, FILE* arq);
 
+Historico* RetornaHistorico(ListaHistorico* lista, char* chave);
+
 void DestroiListaHistorico(ListaHistorico* lista);
 
 

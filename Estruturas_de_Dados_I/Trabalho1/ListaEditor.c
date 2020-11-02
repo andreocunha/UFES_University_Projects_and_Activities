@@ -135,9 +135,9 @@ void ImprimeListaEditor(ListaEditor* lista)
     for (p = lista->prim; p != NULL; p = p->prox)
     {
         ImprimeEditor(p->ed);
-        // printf("Contribuicoes do: %s\n", RetornaNomeEditor(p->ed));
-        // ImprimeListaContribuicaoEditor(p->contrib);
-        // printf("\n");
+        printf("Contribuicoes do: %s\n", RetornaNomeEditor(p->ed));
+        ImprimeListaContribuicaoEditor(p->contrib);
+        printf("\n");
     }
 }
 
@@ -157,7 +157,7 @@ void DestroiListaEditor(ListaEditor* lista)
         temp = p;
         p = p->prox;
         DestroiEditor(temp->ed);
-        free(temp->contrib);
+        DestroiCelulaListaContribuicao(temp->contrib); // O erro ta aqui
         free(temp);
     }
     free(lista);

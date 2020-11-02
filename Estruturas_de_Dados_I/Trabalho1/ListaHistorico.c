@@ -58,6 +58,19 @@ void ImprimeListaHistorico(ListaHistorico* lista, FILE* arq)
     fprintf(arq, "\n");
 }
 
+Historico* RetornaHistorico(ListaHistorico* lista, char* chave)
+{
+    CelulaHistorico* p = lista->prim;
+
+    for (p = lista->prim; p!=NULL; p = p->prox) {
+        if (strcmp(RetornaNomeEditorHistorico(p->hist), chave)== 0)
+        {
+            return p->hist;
+        }
+    }
+    return NULL;
+}
+
 void DestroiListaHistorico(ListaHistorico* lista)
 {
     CelulaHistorico* p = lista->prim;

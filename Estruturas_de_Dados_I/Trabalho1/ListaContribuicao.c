@@ -89,6 +89,47 @@ void RemoveListaContribuicao(ListaContribuicao* lista, char* chave)
 
 }
 
+void RemoveCelulaListaContribuicao(ListaContribuicao* lista, char* chave)
+{
+    CelulaContribuicao* p = lista->prim;
+    CelulaContribuicao* ant = NULL;
+
+    for (p = lista->prim; p!=NULL; p = p->prox) {
+        if (strcmp(RetornaArquivoContribuicao(p->contrib), chave)== 0)
+        {
+            break;
+        }
+        ant = p;
+    }
+
+    if(p == NULL)
+    {
+        printf("ERRO: não existe a contribuicao %s\n", chave);
+        return;
+    }
+
+    // se for o unico
+    if(p == lista->prim && p == lista->ult)
+    {
+        lista->prim = lista->ult = NULL;
+    }
+    else if (p == lista->prim) // se for o primeiro da lista
+    {
+        lista->prim = p->prox;
+    }
+    else if (p == lista->ult) // se for o ultim da lista
+    {
+        lista->ult = ant;
+        lista->ult->prox = NULL;
+    }
+    else // caso comum
+    {
+        ant->prox = p->prox;
+    }
+    
+    free(p);
+}
+
 
 Contribuicao* RetornaContribuicaoLista(ListaContribuicao* lista, char* chave)
 {
@@ -107,16 +148,21 @@ void ImprimeListaContribuicao(ListaContribuicao* lista, FILE* arq)
 {
     CelulaContribuicao* p;
     Editor* ed;
+    char statusRetirado;
 
     printf("--> Textos\n");
     fprintf(arq, "--> Textos\n");
 
     for (p = lista->prim; p != NULL; p = p->prox)
     {
-        ed = RetornaEditorListaContribuicao(lista, p->contrib);
-        printf("\n-------- %s (%s) --------\n\n", RetornaArquivoContribuicao(p->contrib), RetornaNomeEditor(ed));
-        fprintf(arq, "\n-------- %s (%s) --------\n\n", RetornaArquivoContribuicao(p->contrib), RetornaNomeEditor(ed));
-        ImprimeContribuicao(p->contrib, arq);
+        statusRetirado = RetornaStatusContribuicao(p->contrib);
+        if(statusRetirado == 'n')
+        {
+            ed = RetornaEditorListaContribuicao(lista, p->contrib);
+            printf("\n-------- %s (%s) --------\n\n", RetornaArquivoContribuicao(p->contrib), RetornaNomeEditor(ed));
+            fprintf(arq, "\n-------- %s (%s) --------\n\n", RetornaArquivoContribuicao(p->contrib), RetornaNomeEditor(ed));
+            ImprimeContribuicao(p->contrib, arq);
+        }
     }
 }
 
@@ -155,6 +201,21 @@ void DestroiListaContribuicao(ListaContribuicao* lista)
         temp = p;
         p = p->prox;
         DestroiContribuicao(temp->contrib);
+        free(temp);
+    }
+    free(lista);
+}
+
+
+void DestroiCelulaListaContribuicao(ListaContribuicao* lista)
+{
+    CelulaContribuicao* p = lista->prim;
+    CelulaContribuicao* temp;
+
+    while (p != NULL)
+    {
+        temp = p;
+        p = p->prox;
         free(temp);
     }
     free(lista);

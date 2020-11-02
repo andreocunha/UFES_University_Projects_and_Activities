@@ -9,6 +9,9 @@ typedef struct historico Historico;
 
 Historico* InicializaHistorico (char* nomeEditor, char* arquivo);
 void ImprimeHistorico(Historico* hist, FILE* arq);
+void AlteraStatusHistorico(Historico* hist);
+char RetornaStatusHistorico(Historico* hist);
+char* RetornaNomeEditorHistorico(Historico* hist);
 void DestroiHistorico(Historico* hist);
 
 

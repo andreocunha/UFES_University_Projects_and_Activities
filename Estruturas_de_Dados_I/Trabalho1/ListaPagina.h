@@ -27,6 +27,8 @@ ListaLink* RetornaListaLinkPagina(ListaPagina* lista, char* chave);
 
 ListaHistorico* RetornaListaHistoricoPagina(ListaPagina* lista, char* chave);
 
+void RemoveLinkListaLinkListaPagina(ListaPagina* lista, char* chave);
+
 void ImprimeListaPagina(ListaPagina* lista);
 
 void ImprimeUnicaPaginaLista(ListaPagina* lista, Pagina* pag);
