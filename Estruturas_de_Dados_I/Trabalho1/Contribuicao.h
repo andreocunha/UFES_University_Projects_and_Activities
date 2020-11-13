@@ -52,5 +52,7 @@ void AlteraStatusContribuicao(Contribuicao* contrib);
 
 char RetornaStatusContribuicao(Contribuicao* contrib);
 
+void ImprimeHistoricoContribuicao(Contribuicao* contrib, char* editor, FILE* arq);
+
 #endif /*CONTRIBUICAO_H*/
 

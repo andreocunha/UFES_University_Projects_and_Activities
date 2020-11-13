@@ -6,12 +6,12 @@
 #include <string.h>
 #include "Pagina.h"
 #include "ListaContribuicao.h"
-#include "ListaLink.h"
-#include "ListaHistorico.h"
 
 
 typedef struct celulaPagina CelulaPagina;
 typedef struct listaPagina ListaPagina;
+
+#include "ListaLink.h"
 
 ListaPagina* InicializaListaPagina (void);
 
@@ -24,8 +24,6 @@ Pagina* RetornaPagina(ListaPagina* lista, char* chave);
 ListaContribuicao* RetornaListaContribuicaoPagina(ListaPagina* lista, char* chave);
 
 ListaLink* RetornaListaLinkPagina(ListaPagina* lista, char* chave);
-
-ListaHistorico* RetornaListaHistoricoPagina(ListaPagina* lista, char* chave);
 
 void RemoveLinkListaLinkListaPagina(ListaPagina* lista, char* chave);
 

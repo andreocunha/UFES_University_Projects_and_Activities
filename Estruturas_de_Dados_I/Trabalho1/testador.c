@@ -6,7 +6,6 @@
 #include "ListaPagina.h"
 #include "ListaContribuicao.h"
 #include "ListaLink.h"
-#include "ListaHistorico.h"
 
 
 void INSEREPAGINA(FILE *arq, ListaPagina* lista);
@@ -143,9 +142,17 @@ void RETIRAPAGINA(FILE* arq, FILE* log, ListaPagina* lista)
     char nomePag[50];
     fscanf(arq,"%s",nomePag);
 
+    if(RetornaPagina(lista, nomePag) == NULL)
+    {
+        fprintf(log,"ERRO: não existe a pagina %s\n", nomePag);
+        printf("ERRO: não existe a pagina %s\n", nomePag);
+        return;
+    }
+    
+    RemoveLinkListaLinkListaPagina(lista, nomePag);
     RemoveListaPagina(lista, nomePag, log);
 
-    RemoveLinkListaLinkListaPagina(lista, nomePag);
+    
 }
 
 void INSEREEDITOR(FILE *arq, ListaEditor* lista)
@@ -161,7 +168,6 @@ void INSEREEDITOR(FILE *arq, ListaEditor* lista)
 void INSERECONTRIBUICAO(FILE *arq, ListaPagina* listaPagina, ListaEditor* listaEditor)
 {
     Contribuicao* contrib;
-    Historico* hist;
     Editor* ed;
 
     char nomePag[50];
@@ -193,7 +199,7 @@ void INSERECONTRIBUICAO(FILE *arq, ListaPagina* listaPagina, ListaEditor* listaE
     }
 
     int i = 0;
-    while( !feof(arq2)) {
+    while( !feof(arq2) && i<10000) {
 		// fgets(texto, 10000, arq2);
         c = fgetc(arq2);
         texto[i] = c;
@@ -202,14 +208,26 @@ void INSERECONTRIBUICAO(FILE *arq, ListaPagina* listaPagina, ListaEditor* listaE
     texto[i-1] = '\0';
     fclose(arq2);
 
+    if(RetornaPagina(listaPagina, nomePag) == NULL)
+    {
+        printf("Essa pagina nao existe\n");
+        return;
+    }
+    
     ed = RetornaEditor(listaEditor, nomeEditor);
 
+    if ( ed == NULL)
+    {
+        printf("Esse editor nao existe\n");
+        return;
+    }
+    
+
     contrib = InicializaContribuicao(texto, nomeArq);
-    hist = InicializaHistorico(nomeEditor, nomeArq);
 
     InsereListaContribuicao(RetornaListaContribuicaoPagina(listaPagina, nomePag), contrib, ed);
-    InsereListaHistorico(RetornaListaHistoricoPagina(listaPagina, nomePag), hist);
-    InsereContribuicaoListaEditor(listaEditor, contrib, nomeEditor);
+    InsereListaContribuicao(RetornaListaContribuicaoEditor(listaEditor, nomeEditor), contrib, ed);
+    // InsereContribuicaoListaEditor(listaEditor, contrib, nomeEditor);
 
 }
 
@@ -227,6 +245,12 @@ void RETIRACONTRIBUICAO(FILE *arq, ListaPagina* listaPagina, ListaEditor* listaE
     fscanf(arq,"%s",nomeEditor);
     fscanf(arq,"%s",nomeArq);
 
+    if(RetornaPagina(listaPagina, nomePag) == NULL)
+    {
+        return;
+    }
+
+
     ed = RetornaEditor(listaEditor, nomeEditor);
     listaContrib = RetornaListaContribuicaoPagina(listaPagina, nomePag);
     contrib = RetornaContribuicaoLista(listaContrib, nomeArq);
@@ -236,10 +260,8 @@ void RETIRACONTRIBUICAO(FILE *arq, ListaPagina* listaPagina, ListaEditor* listaE
         printf("Esse usuario nao tem permissao de remover essa contribuicao\n");
         return;
     }
-    RemoveCelulaListaContribuicao(RetornaListaContribuicaoEditor(listaEditor, nomeEditor), nomeArq);
-    // RemoveListaContribuicao(listaContrib, nomeArq);
     AlteraStatusContribuicao(contrib);
-    AlteraStatusHistorico(RetornaHistorico(RetornaListaHistoricoPagina(listaPagina, nomePag), nomeEditor));
+    RemoveCelulaListaContribuicao(RetornaListaContribuicaoEditor(listaEditor, nomeEditor), nomeArq);
 
 }
 
@@ -253,6 +275,12 @@ void INSERELINK(FILE *arq, ListaPagina* lista)
 
     fscanf(arq,"%s",origem);
     fscanf(arq,"%s",destino);
+
+    if(RetornaPagina(lista, origem) == NULL || RetornaPagina(lista, destino) == NULL)
+    {
+        return;
+    }
+
 
     listaLink = RetornaListaLinkPagina(lista, origem);
 
@@ -277,9 +305,9 @@ void RETIRALINK(FILE *arq, ListaPagina* lista)
 
 void CAMINHO(FILE* arq, FILE* log, ListaPagina* lista)
 {
-    ListaLink* listaLink;
+    ListaLink* visited;
+    Pagina* pagOrigem;
     Pagina* pagDestino;
-
 
     char origem[50];
     char destino[50];
@@ -287,10 +315,21 @@ void CAMINHO(FILE* arq, FILE* log, ListaPagina* lista)
     fscanf(arq,"%s",origem);
     fscanf(arq,"%s",destino);
 
-    listaLink = RetornaListaLinkPagina(lista, origem);
-    pagDestino = RetornaPaginaListaLink(listaLink, destino);
+    pagOrigem = RetornaPagina(lista, origem);
+    pagDestino = RetornaPagina(lista, destino);  
 
-    if(pagDestino == NULL)
+    visited = InicializaListaLink();
+
+    if (pagOrigem == NULL || pagDestino == NULL)
+    {
+        printf("Essa pagina nao existe\n");
+        return;
+    }
+
+    listaTodosCaminhosPossiveis(pagOrigem, visited, lista);
+    // ImprimeListaLink(visited, log);
+
+    if(RetornaPaginaListaLink(visited, destino) == NULL)
     {
         fprintf(log, "NAO HA CAMINHO DA PAGINA %s PARA %s\n", origem, destino);
     }
@@ -299,6 +338,7 @@ void CAMINHO(FILE* arq, FILE* log, ListaPagina* lista)
         fprintf(log, "HA CAMINHO DA PAGINA %s PARA %s\n", origem, destino);
     }
     
+    DestroiListaLink(visited);
 
 }
 
@@ -309,11 +349,17 @@ void IMPRIMEPAGINA(FILE *arq, ListaPagina* lista)
 
     fscanf(arq,"%s",nomePag);
     pag = RetornaPagina(lista, nomePag);
+
+    if (pag == NULL)
+    {
+        printf("Essa pagina nao existe\n");
+        return;
+    }
     ImprimeUnicaPaginaLista(lista, pag);
 }
 
 void IMPRIMEWIKED(ListaPagina* listaPagina, ListaEditor* listaEditor)
 {
     ImprimeListaPagina(listaPagina);
-    ImprimeListaEditor(listaEditor);
+    // ImprimeListaEditor(listaEditor);
 }

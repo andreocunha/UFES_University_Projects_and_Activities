@@ -43,7 +43,6 @@ void ImprimePagina(Pagina* pag, FILE *arq)
 {
     printf("%s\n\n", pag->nome);
     fprintf(arq,"%s\n\n", pag->nome);
-    // printf("%s\n", pag->arquivo);
 }
 
 

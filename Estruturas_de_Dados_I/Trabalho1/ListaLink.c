@@ -80,7 +80,6 @@ void RemoveListaLink(ListaLink* lista, char* chave)
     }
     
     free(p);
-
 }
 
 void ImprimeListaLink(ListaLink* lista, FILE* arq)
@@ -122,6 +121,25 @@ Pagina* RetornaPaginaListaLink(ListaLink* lista, char* chave)
     }
     return link->pag;
 }
+
+
+void listaTodosCaminhosPossiveis(Pagina* pag, ListaLink* visited, ListaPagina* listaPag)
+{
+    InsereListaLink(visited, pag);
+
+    ListaLink* listaLink = RetornaListaLinkPagina(listaPag, RetornaNomePagina(pag));
+    CelulaLink* p;
+    char* nomePag;
+
+    for (p = listaLink->prim; p!=NULL; p = p->prox) {
+        nomePag = RetornaNomePagina(p->pag);
+
+        if(RetornaCelulaLink(visited, nomePag) == NULL){
+            listaTodosCaminhosPossiveis(p->pag, visited, listaPag);
+        }
+    }
+}
+
 
 void DestroiListaLink(ListaLink* lista)
 {

@@ -166,6 +166,23 @@ void ImprimeListaContribuicao(ListaContribuicao* lista, FILE* arq)
     }
 }
 
+void ImprimeListaHistoricoContribuicao(ListaContribuicao* lista, FILE* arq)
+{
+    CelulaContribuicao* p;
+    Editor* ed;
+
+    printf("--> Historico de contribuicoes\n");
+    fprintf(arq, "--> Historico de contribuicoes\n");
+
+    for (p = lista->prim; p != NULL; p = p->prox)
+    {
+        ed = RetornaEditorListaContribuicao(lista, p->contrib);
+        ImprimeHistoricoContribuicao(p->contrib, RetornaNomeEditor(ed), arq);
+    }
+    printf("\n");
+    fprintf(arq, "\n");
+}
+
 
 void ImprimeListaContribuicaoEditor(ListaContribuicao* lista)
 {

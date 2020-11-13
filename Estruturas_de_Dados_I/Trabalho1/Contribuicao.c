@@ -46,6 +46,20 @@ void ImprimeContribuicao(Contribuicao* contrib, FILE* arq)
     {
         printf("%s\n", contrib->texto);
         fprintf(arq, "%s\n", contrib->texto);
+    }    
+}
+
+void ImprimeHistoricoContribuicao(Contribuicao* contrib, char* editor, FILE* arq)
+{
+    if(contrib->statusRetirado == 'n')
+    {
+        printf("%s %s\n", editor, contrib->arquivo);
+        fprintf(arq, "%s %s\n", editor, contrib->arquivo);
+    }
+    else if(contrib->statusRetirado == 's')
+    {
+        printf("%s %s <<retirada>>\n", editor, contrib->arquivo);
+        fprintf(arq, "%s %s <<retirada>>\n", editor, contrib->arquivo);
     }
 }
 

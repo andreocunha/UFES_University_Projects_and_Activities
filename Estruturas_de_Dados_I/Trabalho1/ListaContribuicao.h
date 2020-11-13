@@ -27,6 +27,8 @@ void ImprimeListaContribuicao(ListaContribuicao* lista, FILE* arq);
 
 void ImprimeListaContribuicaoEditor(ListaContribuicao* lista);
 
+void ImprimeListaHistoricoContribuicao(ListaContribuicao* lista, FILE* arq);
+
 void DestroiListaContribuicao(ListaContribuicao* lista);
 
 void DestroiCelulaListaContribuicao(ListaContribuicao* lista);

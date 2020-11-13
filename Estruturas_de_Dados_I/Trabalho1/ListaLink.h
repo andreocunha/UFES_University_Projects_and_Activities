@@ -9,6 +9,7 @@
 typedef struct celulaLink CelulaLink;
 typedef struct listaLink ListaLink;
 
+#include "ListaPagina.h"
 
 ListaLink* InicializaListaLink (void);
 
@@ -19,6 +20,8 @@ void RemoveListaLink(ListaLink* lista, char* chave);
 void ImprimeListaLink(ListaLink* lista, FILE* arq);
 
 Pagina* RetornaPaginaListaLink(ListaLink* lista, char* chave);
+
+void listaTodosCaminhosPossiveis(Pagina* pag, ListaLink* visited, ListaPagina* listaPag);
 
 void DestroiListaLink(ListaLink* lista);
 

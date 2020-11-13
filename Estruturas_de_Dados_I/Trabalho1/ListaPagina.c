@@ -7,7 +7,6 @@ struct celulaPagina
     CelulaPagina* prox;
     ListaContribuicao* contrib;
     ListaLink* link;
-    ListaHistorico* hist;
 };
 
 
@@ -34,7 +33,6 @@ void InsereListaPagina(ListaPagina* lista, Pagina* pag)
 
     nova->contrib = InicializaListaContribuicao();
     nova->link = InicializaListaLink();
-    nova->hist = InicializaListaHistorico();
 
     if(lista->prim == NULL && lista->ult == NULL)
     {
@@ -91,7 +89,6 @@ void RemoveListaPagina(ListaPagina* lista, char* chave, FILE* log)
 
     DestroiListaContribuicao(p->contrib);
     DestroiListaLink(p->link);
-    DestroiListaHistorico(p->hist);
     DestroiPagina(p->pag);
     free(p); 
     
@@ -132,12 +129,6 @@ ListaLink* RetornaListaLinkPagina(ListaPagina* lista, char* chave)
     return pag->link;
 }
 
-ListaHistorico* RetornaListaHistoricoPagina(ListaPagina* lista, char* chave)
-{
-    CelulaPagina* pag = RetornaCelulaPagina(lista, chave);
-    return pag->hist;
-}
-
 void RemoveLinkListaLinkListaPagina(ListaPagina* lista, char* chave)
 {
     CelulaPagina* p;
@@ -148,6 +139,7 @@ void RemoveLinkListaLinkListaPagina(ListaPagina* lista, char* chave)
     }
 }
 
+
 void ImprimeListaPagina(ListaPagina* lista)
 {
     CelulaPagina* p;
@@ -157,13 +149,16 @@ void ImprimeListaPagina(ListaPagina* lista)
         FILE* arq;
         arq = fopen(RetornaNomeArquivo(p->pag), "w");  
 
-        ImprimePagina(p->pag, arq);
-        ImprimeListaHistorico(p->hist, arq);
-        ImprimeListaLink(p->link, arq);
-        ImprimeListaContribuicao(p->contrib, arq);
+        if(p->pag != NULL)
+        {
+            ImprimePagina(p->pag, arq);
+            ImprimeListaHistoricoContribuicao(p->contrib, arq);
+            ImprimeListaLink(p->link, arq);
+            ImprimeListaContribuicao(p->contrib, arq);
 
-        printf("\n");
-        fclose(arq);
+            printf("\n");
+            fclose(arq);
+        }
     }
 }
 
@@ -179,7 +174,7 @@ void ImprimeUnicaPaginaLista(ListaPagina* lista, Pagina* pag)
         if(p->pag == pag)
         {
             ImprimePagina(p->pag, arq);
-            ImprimeListaHistorico(p->hist, arq);
+            ImprimeListaHistoricoContribuicao(p->contrib, arq);
             ImprimeListaLink(p->link, arq);
             ImprimeListaContribuicao(p->contrib, arq);
 
@@ -188,7 +183,6 @@ void ImprimeUnicaPaginaLista(ListaPagina* lista, Pagina* pag)
             return;
         }
     }
-
 }
 
 void DestroiListaPagina(ListaPagina* lista)
@@ -203,7 +197,6 @@ void DestroiListaPagina(ListaPagina* lista)
         DestroiPagina(temp->pag);
         DestroiListaContribuicao(temp->contrib);
         DestroiListaLink(temp->link);
-        DestroiListaHistorico(temp->hist);
         free(temp);
     }
     free(lista);
