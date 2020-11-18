@@ -8,10 +8,10 @@
 typedef struct contribuicao Contribuicao;
 
 /*Inicializa uma contribuicao
- * inputs: um texto e um arquivo
+ * inputs: um texto e o nome do arquivo
  * output: ponteiro para a contribuicao inicializada
- * pre-condicao: uma string e um arquivo existente
- * pos-condicao: contribuicao de retorno existe e contem um string
+ * pre-condicao: uma string e o nome do arquivo existente
+ * pos-condicao: contribuicao de retorno existe e contem duas strings
  */
 Contribuicao* InicializaContribuicao (char* texto, char* arq);
 
@@ -47,11 +47,28 @@ char* RetornaArquivoContribuicao(Contribuicao* contrib);
  */
 void DestroiContribuicao(Contribuicao* contrib);
 
-
+/*Altera o status da contribuicao
+ * inputs: uma contribuicao
+ * output: nenhum
+ * pre-condicao: contribuicao existe
+ * pos-condicao: o status da contribuicao eh modificado
+ */
 void AlteraStatusContribuicao(Contribuicao* contrib);
 
+/*Retorna o status da contribuicao
+ * inputs: uma contribuicao
+ * output: a string do status
+ * pre-condicao: contribuicao existe
+ * pos-condicao: contribuicao não é modificada
+ */
 char RetornaStatusContribuicao(Contribuicao* contrib);
 
+/*Imprime o hitorico da contribuicao
+ * inputs: uma contribuicao, o nome do editor e um arquivo
+ * output: nenhum
+ * pre-condicao: contribuicao, nome do editor e o arquivo existem
+ * pos-condicao: o arquivo contem o conteudo do historico da contribuicao
+ */
 void ImprimeHistoricoContribuicao(Contribuicao* contrib, char* editor, FILE* arq);
 
 #endif /*CONTRIBUICAO_H*/

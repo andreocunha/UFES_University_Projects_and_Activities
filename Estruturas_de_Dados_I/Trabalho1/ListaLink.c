@@ -123,7 +123,7 @@ Pagina* RetornaPaginaListaLink(ListaLink* lista, char* chave)
 }
 
 
-void listaTodosCaminhosPossiveis(Pagina* pag, ListaLink* visited, ListaPagina* listaPag)
+void ListaTodosCaminhosPossiveis(Pagina* pag, ListaLink* visited, ListaPagina* listaPag)
 {
     InsereListaLink(visited, pag);
 
@@ -135,7 +135,7 @@ void listaTodosCaminhosPossiveis(Pagina* pag, ListaLink* visited, ListaPagina* l
         nomePag = RetornaNomePagina(p->pag);
 
         if(RetornaCelulaLink(visited, nomePag) == NULL){
-            listaTodosCaminhosPossiveis(p->pag, visited, listaPag);
+            ListaTodosCaminhosPossiveis(p->pag, visited, listaPag);
         }
     }
 }

@@ -352,7 +352,7 @@ void CAMINHO(FILE* arq, FILE* log, ListaPagina* lista)
         return;
     }
 
-    listaTodosCaminhosPossiveis(pagOrigem, visited, lista);
+    ListaTodosCaminhosPossiveis(pagOrigem, visited, lista);
     // ImprimeListaLink(visited, log);
 
     if(RetornaPaginaListaLink(visited, destino) == NULL)
