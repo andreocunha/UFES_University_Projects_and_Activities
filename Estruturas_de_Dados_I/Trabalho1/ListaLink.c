@@ -125,15 +125,20 @@ Pagina* RetornaPaginaListaLink(ListaLink* lista, char* chave)
 
 void ListaTodosCaminhosPossiveis(Pagina* pag, ListaLink* visited, ListaPagina* listaPag)
 {
+    // insere a pagina na lista com os caminhos visitados
     InsereListaLink(visited, pag);
 
+    // retorna a lista de links da pagina atual
     ListaLink* listaLink = RetornaListaLinkPagina(listaPag, RetornaNomePagina(pag));
     CelulaLink* p;
     char* nomePag;
 
+    // o loop vai percorrer todas as paginas da lista de links
     for (p = listaLink->prim; p!=NULL; p = p->prox) {
         nomePag = RetornaNomePagina(p->pag);
 
+        // se a pagina atual lida na lista de links nao estiver na lista de visitados, chama por recursao a "ListaTodosCaminhosPossiveis"
+        // para inserir essa pagina na lista de visitados
         if(RetornaCelulaLink(visited, nomePag) == NULL){
             ListaTodosCaminhosPossiveis(p->pag, visited, listaPag);
         }

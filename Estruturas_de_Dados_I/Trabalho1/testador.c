@@ -8,9 +8,9 @@
 #include "ListaLink.h"
 
 
-void INSEREPAGINA(FILE *arq, ListaPagina* lista);
+void INSEREPAGINA(FILE *arq, FILE* log, ListaPagina* lista);
 void RETIRAPAGINA(FILE* arq, FILE* log, ListaPagina* lista);
-void INSEREEDITOR(FILE *arq, ListaEditor* lista);
+void INSEREEDITOR(FILE *arq, FILE* log, ListaEditor* lista);
 void INSERECONTRIBUICAO(FILE *arq, FILE* log, ListaPagina* listaPagina, ListaEditor* listaEditor);
 void RETIRACONTRIBUICAO(FILE *arq, FILE* log, ListaPagina* listaPagina, ListaEditor* listaEditor);
 void INSERELINK(FILE *arq, FILE* log, ListaPagina* lista);
@@ -42,12 +42,14 @@ main(int argc, char *argv[])
         exit(1);
     }
 
+    // consome todo o lixo no comeco do arquivo
     while (!(c >= 'a' && c <= 'z') && !(c >= 'A' && c <= 'Z'))
     {
         fscanf(arq, "%c", &c);
     }
     
 
+    // concatena a primeira palavra
     palavra[0] = c;
     for(int i = 1; c!= ' '; i++)
     {
@@ -60,7 +62,6 @@ main(int argc, char *argv[])
         {
             palavra[i] = '\0';
         }
-        
     }
 
 
@@ -68,7 +69,7 @@ main(int argc, char *argv[])
     {
         if(strcmp(palavra, "INSEREPAGINA")== 0)
     {
-        INSEREPAGINA(arq, listaPagina);
+        INSEREPAGINA(arq, log, listaPagina);
     }
     else if(strcmp(palavra, "RETIRAPAGINA")== 0)
     {
@@ -76,7 +77,7 @@ main(int argc, char *argv[])
     }
     else if(strcmp(palavra, "INSEREEDITOR")== 0)
     {
-        INSEREEDITOR(arq, listaEditor);
+        INSEREEDITOR(arq, log, listaEditor);
     }
     else if(strcmp(palavra, "INSERECONTRIBUICAO")== 0)
     {
@@ -137,13 +138,20 @@ int verificaExistenciaPagina(FILE* log, ListaPagina* lista, char* nomePag)
 
 
 
-void INSEREPAGINA(FILE *arq, ListaPagina* lista)
+void INSEREPAGINA(FILE *arq, FILE* log, ListaPagina* lista)
 {
     char nomePag[50];
     char nomeArq[50];
     
     fscanf(arq,"%s",nomePag);
     fscanf(arq,"%s",nomeArq);
+
+    if(RetornaPagina(lista, nomePag) != NULL)
+    {
+        fprintf(log,"ERRO: a pagina %s ja existe\n", nomePag);
+        printf("ERRO: a pagina %s ja existe\n", nomePag);
+        return;
+    }
 
     Pagina* nova = InicializaPagina(nomePag, nomeArq);
     InsereListaPagina(lista, nova);
@@ -160,17 +168,27 @@ void RETIRAPAGINA(FILE* arq, FILE* log, ListaPagina* lista)
         return;
     }
     
+    // remove a pagina de todas as listas de links a pagina que esta sendo retirada
     RemoveLinkListaLinkListaPagina(lista, nomePag);
+
+    // retira a pagina do sistema (liberando espaco na memoria)
     RemoveListaPagina(lista, nomePag, log);
 
     
 }
 
-void INSEREEDITOR(FILE *arq, ListaEditor* lista)
+void INSEREEDITOR(FILE *arq, FILE* log, ListaEditor* lista)
 {
     Editor* editor;
     char nomeEditor[50];
     fscanf(arq,"%s",nomeEditor);
+    
+    if(RetornaEditor(lista, nomeEditor) != NULL)
+    {
+        fprintf(log,"ERRO: o editor %s ja existe\n", nomeEditor);
+        printf("ERRO: o editor %s ja existe\n", nomeEditor);
+        return;
+    }
 
     editor = InicializaEditor(nomeEditor);
     InsereListaEditor(lista, editor);
@@ -185,7 +203,6 @@ void INSERECONTRIBUICAO(FILE *arq, FILE* log, ListaPagina* listaPagina, ListaEdi
     char nomeEditor[50];
     char nomeArq[50];
     char texto[10000];
-    char caminho[50] = "./Entradas/";
     char c;
 
     fscanf(arq,"%s",nomePag);
@@ -199,9 +216,7 @@ void INSERECONTRIBUICAO(FILE *arq, FILE* log, ListaPagina* listaPagina, ListaEdi
         texto[j] = '\0';
     }
     
-
-    strcat(caminho, nomeArq);
-    arq2 = fopen(caminho, "r");
+    arq2 = fopen(nomeArq, "r");
 
     if (arq2 == NULL) // Pode-se fazer o teste dessa forma
     {
@@ -297,6 +312,14 @@ void INSERELINK(FILE *arq, FILE* log, ListaPagina* lista)
     }
 
     listaLink = RetornaListaLinkPagina(lista, origem);
+
+    if(RetornaPaginaListaLink(listaLink, destino) != NULL)
+    {
+        fprintf(log,"ERRO: a pagina %s ja existe na lista de links da pagina %s\n", destino, origem);
+        printf("ERRO: a pagina %s ja existe na lista de links da pagina %s\n", destino, origem);
+        return;
+    }
+
     pag = RetornaPagina(lista, destino);
 
     InsereListaLink(listaLink, pag);
@@ -387,5 +410,4 @@ void IMPRIMEPAGINA(FILE* arq, FILE* log, ListaPagina* lista)
 void IMPRIMEWIKED(ListaPagina* listaPagina, ListaEditor* listaEditor)
 {
     ImprimeListaPagina(listaPagina);
-    // ImprimeListaEditor(listaEditor);
 }
