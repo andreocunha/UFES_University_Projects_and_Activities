@@ -5,7 +5,7 @@
 # Estrutura de Dados 1
 #
 
-compile: 
+compile: arv.c andrecunha.c
 	gcc -ggdb -std=c99 -Wall -Werror -Wformat=0 -o executavel.out *.c
 
 clean:
