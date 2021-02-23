@@ -1,0 +1,11 @@
+10
+0 Fulano
+10 Ciclano
+3 Beltrano
+5 Anonimo
+7 Geronimo
+8 Sozia
+4 TripaSeca
+5 QuasiNada
+8 Chapolin
+6 Chaves
