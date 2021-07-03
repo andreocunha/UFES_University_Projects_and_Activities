@@ -1,0 +1,21 @@
+cadastrar Bruno_Mossa_de_Rezende 32 1.9
+cadastrar Isac_Viana_Santos 28 2.08
+cadastrar Eder_Francis_Carbonera 35 2.07
+cadastrar Lucas_Eduardo_Loh 27 1.96
+cadastrar William_Peixoto_Arjona 39 1.85
+cadastrar Wallace_Leandro_de_Souza 31 1.98
+cadastrar Thales_Gustavo_Hoss 30 1.87
+cadastrar Luiz_Felipe_Marques_Fonteles 34 1.99
+cadastrar Mauricio_Luiz_de_Souza 29 2.13
+listar
+ordenar N
+listar
+excluir 5
+ordenar I
+listar
+excluir 3
+ordenar A
+listar
+excluir 1
+listar
+sair

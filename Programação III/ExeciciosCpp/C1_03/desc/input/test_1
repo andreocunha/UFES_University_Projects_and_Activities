@@ -1,0 +1,20 @@
+cadastrar Stephen_Curry 31 1.91
+cadastrar Michael_Jordan 56 1.96
+cadastrar Kobe_Bryant 40 1.98
+cadastrar LeBron_James 34 2.03
+cadastrar Kevin_Durant 30 2.06
+cadastrar Dwight_Howard 33 2.11
+cadastrar Shaquille_O'Neal 47 2.16
+cadastrar Gary_Payton 50 1.93
+listar
+ordenar N
+listar
+ordenar I
+listar
+ordenar A
+listar
+excluir 6
+excluir 4
+excluir 2
+listar
+sair

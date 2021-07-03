@@ -1,0 +1,22 @@
+cadastrar Stephen_Curry 31 1.91 Golden_State_Warriors
+cadastrar Michael_Jordan 56 1.96 Chicago_Bulls
+cadastrar Kobe_Bryant 40 1.98 Los_Angeles_Lakers
+cadastrar LeBron_James 34 2.03 Cleveland_Cavaliers
+cadastrar Kevin_Durant 30 2.06 Oklahoma_City_Thunder
+cadastrar Dwight_Howard 33 2.11 Washington_Wizards
+cadastrar Shaquille_O'Neal 47 2.16 Miami_Heat
+cadastrar Gary_Payton 50 1.93 Seattle_Supersonics
+listar
+ordenar N
+listar
+ordenar I
+listar
+ordenar A
+listar
+ordenar T
+listar
+excluir 6
+excluir 4
+excluir 2
+listar
+sair
