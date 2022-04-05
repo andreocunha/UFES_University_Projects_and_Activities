@@ -1,0 +1,375 @@
+     1                                  segment code
+     2                                  ..start:
+     3 00000000 B8[0000]                    MOV 	AX, data
+     4 00000003 8ED8                        MOV 	DS, AX
+     5 00000005 B8[0000]                    MOV 	AX, stack
+     6 00000008 8ED0                        MOV 	SS,AX
+     7 0000000A BC[0001]                    MOV 	SP,stacktop 
+     8                                  
+     9                                  Main:
+    10 0000000D E81502                      call PrintNewLine
+    11 00000010 E81902                      call PrintMenu
+    12 00000013 E82200                      call ReadNumbers2
+    13 00000016 E80002                      call ReadValue
+    14 00000019 80FA31                      cmp dl, '1'
+    15 0000001C 0F845700                    je near Soma
+    16                                      
+    17                                      Operation2:
+    18 00000020 80FA32                      cmp dl, '2'
+    19 00000023 0F848000                    je near Subtracao
+    20                                      
+    21                                      Operation3:
+    22 00000027 80FA33                      cmp dl, '3'
+    23 0000002A 0F84A900                    je near Multi
+    24                                      
+    25                                      Operation4:
+    26 0000002E 80FA34                      cmp dl, '4'
+    27 00000031 0F84CB00                    je near Divisao
+    28                                  
+    29 00000035 E81002                      call Quit  
+    30                                  
+    31                                  ReadNumbers2:
+    32 00000038 B401                        mov ah,1h           ;read a character from console
+    33 0000003A CD21                        int 21h
+    34 0000003C 2C30                        sub al,30h          ;convert number into bcd from as
+    35                                      
+    36 0000003E 3C13                        cmp al,13h          ;if carriage return
+    37 00000040 74CB                        je Main
+    38                                      
+    39 00000042 88C1                        mov cl,al
+    40                                      
+    41 00000044 A1[0000]                    mov ax,[num1]
+    42 00000047 BB0A00                      mov bx,10
+    43 0000004A F7E3                        mul bx
+    44 0000004C A3[0000]                    mov [num1],ax
+    45                                  
+    46 0000004F 000E[0000]                  add [num1],cl
+    47 00000053 E9E2FF                      jmp ReadNumbers2
+    48                                      ;mov [num1],al       ;store number as num1
+    49                                      
+    50                                  
+    51                                  ReadNumbers:
+    52 00000056 BA[4900]                    mov dx,msg5         ;load address of msg1 into dx
+    53 00000059 B409                        mov ah,9h           ;interrupt to display contents of dx
+    54 0000005B CD21                        int 21h    
+    55                                      
+    56 0000005D B401                        mov ah,1h           ;read a character from console
+    57 0000005F CD21                        int 21h
+    58 00000061 2C30                        sub al,30h          ;convert number into bcd from as
+    59                                  
+    60 00000063 A2[0000]                    mov [num1],al       ;store number as num1
+    61                                      
+    62 00000066 BA[6600]                    mov dx,msg6         ;load address of msg2 into dx
+    63 00000069 B409                        mov ah,9h           ;interrupt to display contents of dx
+    64 0000006B CD21                        int 21h    
+    65                                      
+    66 0000006D B401                        mov ah,1h           ;read a character from console
+    67 0000006F CD21                        int 21h
+    68 00000071 2C30                        sub al,30h          ;convert number into bcd from ascii form
+    69 00000073 A2[0200]                    mov [num2],al       ;store number as num2
+    70 00000076 C3                          ret
+    71                                      
+    72                                  Soma:
+    73 00000077 E8DCFF                      call ReadNumbers
+    74                                  
+    75 0000007A A0[0200]                    mov al,[num2]
+    76                                  
+    77 0000007D 0206[0000]                  add al,[num1]       ;add num1 to num2
+    78 00000081 A2[0400]                    mov [result],al        ;store sum in res
+    79 00000084 B400                        mov ah,0            ;clear garabage value (ah to be used later)
+    80 00000086 37                          aaa                 ;converts hex to bcd and stores values in ah and al 
+    81 00000087 80C430                      add ah,30h          ;first digit converted into bcd
+    82 0000008A 0430                        add al,30h          ;second digit converted from ascii to bcd
+    83                                      
+    84 0000008C 89C3                        mov bx,ax           ;save value of ax into bx
+    85 0000008E BA[8200]                    mov dx,msg7         ;print ms3
+    86 00000091 B409                        mov ah,9h
+    87 00000093 CD21                        int 21h
+    88                                      
+    89 00000095 B402                        mov ah,2h           ;print first digit
+    90 00000097 88FA                        mov dl,bh                                
+    91 00000099 CD21                        int 21h
+    92                                      
+    93 0000009B B402                        mov ah,2            ;print second digit
+    94 0000009D 88DA                        mov dl,bl
+    95 0000009F CD21                        int 21h
+    96                                  
+    97 000000A1 E88101                      call PrintNewLine
+    98                                  
+    99 000000A4 E966FF                      jmp Main
+   100                                      
+   101                                  Subtracao:
+   102 000000A7 E8ACFF                      call ReadNumbers
+   103                                      
+   104 000000AA A0[0000]                    mov al,[num1]         
+   105 000000AD 2A06[0200]                  sub al,[num2]       ;sub num2 from num1
+   106 000000B1 A2[0400]                    mov [result],al        ;store sum in res
+   107 000000B4 B400                        mov ah,0            ;clear garabage value (ah to be used later)
+   108 000000B6 37                          aaa                 ;converts hex to bcd and stores values in ah and al 
+   109 000000B7 80C430                      add ah,30h          ;first digit converted into bcd
+   110 000000BA 0430                        add al,30h          ;second digit converted from ascii to bcd
+   111                                      
+   112 000000BC 89C3                        mov bx,ax           ;save value of ax into bx
+   113 000000BE BA[8200]                    mov dx,msg7         ;print ms3
+   114 000000C1 B409                        mov ah,9h
+   115 000000C3 CD21                        int 21h
+   116                                      
+   117 000000C5 B402                        mov ah,2h           ;print first digit
+   118 000000C7 88FA                        mov dl,bh                                
+   119 000000C9 CD21                        int 21h
+   120                                      
+   121 000000CB B402                        mov ah,2            ;print second digit
+   122 000000CD 88DA                        mov dl,bl
+   123 000000CF CD21                        int 21h
+   124                                  
+   125 000000D1 E85101                      call PrintNewLine
+   126                                  
+   127 000000D4 E936FF                      jmp Main
+   128                                  
+   129                                  Multi:
+   130 000000D7 E87CFF                      call ReadNumbers
+   131                                  
+   132 000000DA A1[0000]                    mov ax,[num1]
+   133 000000DD 8B1E[0200]                  mov bx,[num2]
+   134 000000E1 F7E3                        mul bx
+   135                                  
+   136 000000E3 A3[0400]                    mov [result],ax
+   137                                  
+   138 000000E6 BA[8200]                    mov dx,msg7
+   139 000000E9 B409                        mov ah,9h
+   140 000000EB CD21                        int 21h
+   141                                  
+   142 000000ED 8B16[0400]                  mov dx,[result]
+   143 000000F1 E85000                      call imprimenumero
+   144                                  
+   145 000000F4 E82E01                      call PrintNewLine
+   146                                  
+   147 000000F7 B80000                      mov ax,0
+   148 000000FA A3[0400]                    mov [result],ax
+   149 000000FD E90DFF                      jmp Main
+   150                                  
+   151                                  
+   152                                  
+   153                                  Divisao:
+   154 00000100 E853FF                      call ReadNumbers
+   155                                  
+   156 00000103 A1[0000]                    mov ax,[num1]
+   157 00000106 8A1E[0200]                  mov bl,[num2]
+   158 0000010A F6F3                        div bl              ;div num1 to num2
+   159 0000010C A2[0400]                    mov [result],al        ;store sum in res
+   160 0000010F 88E5                        mov ch, ah
+   161                                  
+   162 00000111 B400                        mov ah,0            ;clear garabage value (ah to be used later)
+   163 00000113 37                          aaa                 ;converts hex to bcd and stores values in ah and al 
+   164 00000114 80C430                      add ah,30h          ;first digit converted into bcd
+   165 00000117 0430                        add al,30h          ;second digit converted from ascii to bcd
+   166 00000119 80C530                      add ch,30h          ;rest digit converted from ascii to bcd
+   167                                      
+   168 0000011C 89C3                        mov bx,ax           ;save value of ax into bx
+   169 0000011E BA[8200]                    mov dx,msg7         ;print ms3
+   170 00000121 B409                        mov ah,9h
+   171 00000123 CD21                        int 21h
+   172                                      
+   173 00000125 B402                        mov ah,2h           ;print first digit
+   174 00000127 88FA                        mov dl,bh                                
+   175 00000129 CD21                        int 21h
+   176                                      
+   177 0000012B B402                        mov ah,2            ;print second digit
+   178 0000012D 88DA                        mov dl,bl
+   179 0000012F CD21                        int 21h
+   180                                  
+   181 00000131 BA[9000]                    mov dx,msg8         ;print ms8
+   182 00000134 B409                        mov ah,9h
+   183 00000136 CD21                        int 21h
+   184                                  
+   185 00000138 B402                        mov ah,2            ;print resto
+   186 0000013A 88EA                        mov dl,ch
+   187 0000013C CD21                        int 21h
+   188                                  
+   189 0000013E E8E400                      call PrintNewLine
+   190                                  
+   191 00000141 E9C9FE                      jmp Main
+   192                                  
+   193                                  imprimenumero:
+   194                                  ; Save the context
+   195 00000144 9C                      		PUSHF
+   196 00000145 50                      		PUSH 	AX
+   197 00000146 53                      		PUSH 	BX
+   198 00000147 51                      		PUSH	CX
+   199 00000148 52                      		PUSH 	DX
+   200                                  				
+   201 00000149 BF[9D00]                		MOV 	DI,saida
+   202 0000014C E80D00                  		CALL 	bin2ascii		
+   203                                  
+   204 0000014F BA[9D00]                		MOV 	DX,saida
+   205 00000152 B409                    		MOV 	AH,9h
+   206 00000154 CD21                    		INT 	21h         
+   207                                  		
+   208                                  ; Upgrade the context
+   209 00000156 5A                      		POP 	DX
+   210 00000157 59                      		POP 	CX
+   211 00000158 5B                      		POP		BX
+   212 00000159 58                      		POP 	AX
+   213 0000015A 9D                      		POPF
+   214 0000015B C3                      		RET
+   215                                  
+   216                                  bin2ascii:
+   217 0000015C 81FA0A00                		CMP		DX,10
+   218 00000160 7215                    		JB		Uni
+   219 00000162 81FA6400                		CMP		DX,100 
+   220 00000166 7216                    		JB		Des
+   221 00000168 81FAE803                		CMP		DX,1000
+   222 0000016C 7221                    		JB		Cen
+   223 0000016E 81FA1027                		CMP		DX,10000
+   224 00000172 723A                    		JB		Mil
+   225 00000174 E96500                  		JMP		Dezmil
+   226                                  			
+   227                                  Uni:	
+   228 00000177 81C23000                		ADD		DX,0x0030
+   229 0000017B 8815                    		MOV 	byte [DI],DL
+   230 0000017D C3                      		RET
+   231                                  Des:
+   232 0000017E 89D0                    		MOV 	AX,DX
+   233 00000180 B30A                    		MOV		BL,10
+   234 00000182 F6F3                    		div		BL
+   235 00000184 80C430                  		ADD		AH,0x30
+   236 00000187 0430                    		ADD		AL,0x30
+   237 00000189 8805                    		MOV 	byte [DI],AL
+   238 0000018B 886501                  		MOV 	byte [DI+1],AH
+   239 0000018E C3                      		RET
+   240                                  Cen:		
+   241 0000018F 89D0                    		MOV 	AX,DX
+   242 00000191 B364                    		MOV		BL,100
+   243 00000193 F6F3                    		DIV		BL
+   244 00000195 0430                    		ADD		AL,0x30
+   245 00000197 8805                    		MOV 	byte [DI],AL
+   246 00000199 88E0                    		MOV 	AL,AH
+   247 0000019B 25FF00                  		AND		AX,0x00FF
+   248 0000019E B30A                    		MOV		BL,10
+   249 000001A0 F6F3                    		DIV		BL
+   250 000001A2 80C430                  		ADD		AH,0x30
+   251 000001A5 0430                    		ADD		AL,0x30
+   252 000001A7 884501                  		MOV 	byte [DI+1],AL		
+   253 000001AA 886502                  		MOV 	byte [DI+2],AH
+   254 000001AD C3                      		RET
+   255                                  Mil:		
+   256 000001AE 89D0                    		MOV 	AX,DX
+   257 000001B0 BA0000                  		MOV     DX,0
+   258 000001B3 BBE803                  		MOV		BX,1000
+   259 000001B6 F7F3                    		DIV		BX
+   260 000001B8 0430                    		ADD		AL,0x30
+   261 000001BA 8805                    		MOV 	byte [DI],AL
+   262 000001BC 89D0                    		MOV 	AX,DX
+   263 000001BE B364                    		MOV		BL,100
+   264 000001C0 F6F3                    		DIV		BL
+   265 000001C2 0430                    		ADD		AL,0x30
+   266 000001C4 884501                  		MOV 	byte [DI+1],AL		
+   267 000001C7 88E0                    		MOV 	AL,AH
+   268 000001C9 25FF00                  	    AND     AX,0x00FF
+   269 000001CC B30A                    		MOV		BL,10
+   270 000001CE F6F3                    		DIV		BL
+   271 000001D0 80C430                  		ADD		AH,0x30
+   272 000001D3 0430                    		ADD		AL,0x30
+   273 000001D5 884502                  		MOV 	byte [DI+2],AL		
+   274 000001D8 886503                  		MOV 	byte [DI+3],AH
+   275 000001DB C3                      		RET
+   276                                  Dezmil:
+   277 000001DC 89D0                    		MOV 	AX,DX
+   278 000001DE BA0000                  		MOV     DX,0
+   279 000001E1 BB1027                  		MOV		BX,10000
+   280 000001E4 F7F3                    		DIV		BX
+   281 000001E6 0430                    		ADD		AL,0x30
+   282 000001E8 8805                    		MOV 	byte [DI],AL
+   283 000001EA 89D0                    		MOV		AX,DX		
+   284 000001EC BA0000                  		MOV     DX,0
+   285 000001EF BBE803                  		MOV		BX,1000
+   286 000001F2 F7F3                    		DIV		BX
+   287 000001F4 0430                    		ADD		AL,0x30
+   288 000001F6 884501                  		MOV 	byte [DI+1],AL
+   289 000001F9 89D0                    		MOV 	AX,DX
+   290 000001FB B364                    		MOV		BL,100
+   291 000001FD F6F3                    		DIV		BL
+   292 000001FF 0430                    		ADD		AL,0x30
+   293 00000201 884502                  		MOV 	byte [DI+2],AL		
+   294 00000204 88E0                    		MOV 	AL,AH
+   295 00000206 25FF00                  	    AND     AX,0x00FF
+   296 00000209 B30A                    		MOV		BL,10
+   297 0000020B F6F3                    		DIV		BL
+   298 0000020D 80C430                  		ADD		AH,0x30
+   299 00000210 0430                    		ADD		AL,0x30
+   300 00000212 884503                  		MOV 	byte [DI+3],AL		
+   301 00000215 886504                  		MOV 	byte [DI+4],AH
+   302 00000218 C3                      		RET    
+   303                                  
+   304                                  ReadValue:
+   305 00000219 B401                        mov ah, 1h ; keyboard input subprogram
+   306 0000021B CD21                        int 21h ; read character into al
+   307 0000021D 88C2                        mov dl, al ; copy character to dl
+   308 0000021F C3                      	ret			;
+   309                                  
+   310                                  Print:
+   311 00000220 B409                        mov ah,0x9
+   312 00000222 CD21                        int 0x21
+   313 00000224 C3                          ret             	; retorna
+   314                                  
+   315                                  PrintNewLine:
+   316 00000225 BA[9A00]                	mov dx,CRLF  
+   317 00000228 E8F5FF                      call Print
+   318 0000022B C3                          ret            
+   319                                  
+   320                                  
+   321                                  PrintMenu:
+   322 0000022C BA[0800]                    mov dx, msg1		; Mensagem 1
+   323 0000022F E8EEFF                      call Print      	; Chama a funcao Print
+   324                                      
+   325 00000232 BA[1400]                    mov dx,msg2		; Mensagem 2
+   326 00000235 E8E8FF                      call Print      	; Chama a funcao 
+   327                                      
+   328 00000238 BA[2500]                    mov dx, msg3		; Mensagem 3
+   329 0000023B E8E2FF                      call Print      	; Chama a funcao 
+   330                                      
+   331 0000023E BA[3A00]                    mov dx, msg4		; Mensagem 4
+   332 00000241 E8DCFF                      call Print      	; Chama a funcao 
+   333 00000244 E8DEFF                      call PrintNewLine
+   334 00000247 C3                          ret
+   335                                      
+   336                                  Quit:
+   337 00000248 B44C                        MOV AH,4CH ; retorna para o DOS com código 0
+   338 0000024A CD21                        INT 21h  
+   339                                  
+   340                                  
+   341                                  segment data
+   342                                      CR 		EQU		13
+   343                                      LF 		EQU		10
+   344 00000000 0000                        num1 dw 0
+   345 00000002 0000                        num2 dw 0
+   346 00000004 0000                        result dw 0
+   347 00000006 0000                        resto dw 0
+   348 00000008 0A0D31202D20534F4D-         msg1 db 10,13, "1 - SOMA $"
+   349 00000011 412024             
+   350 00000014 0A0D32202D20535542-     	msg2 db 10,13, "2 - SUBTRACAO $"
+   351 0000001D 54524143414F2024   
+   352 00000025 0A0D33202D204D554C-     	msg3 db 10,13, "3 - MULTIPLICACAO $"
+   353 0000002E 5449504C4943414341-
+   354 00000037 4F2024             
+   355 0000003A 0A0D34202D20444956-     	msg4 db 10,13, "4 - DIVISAO $"
+   356 00000043 4953414F2024       
+   357 00000049 0A0D44696769746520-         msg5 db 10,13, "Digite o primeiro numero: $"
+   358 00000052 6F207072696D656972-
+   359 0000005B 6F206E756D65726F3A-
+   360 00000064 2024               
+   361 00000066 0A0D44696769746520-         msg6 db 10,13, "Digite o segundo numero: $"
+   362 0000006F 6F20736567756E646F-
+   363 00000078 206E756D65726F3A20-
+   364 00000081 24                 
+   365 00000082 0A0D526573756C7461-         msg7 db 10,13, "Resultado: $"
+   366 0000008B 646F3A2024         
+   367 00000090 0A0D526573746F3A20-         msg8 db 10,13, "Resto: $"
+   368 00000099 24                 
+   369 0000009A 0D0A24                      CRLF db 0DH,0AH,'$'
+   370 0000009D <res 00000005>              saida: 		resb 5 
+   371 000000A2 0D0A24                              db CR,LF,'$'
+   372                                  
+   373                                  segment stack stack
+   374 00000000 <res 00000100>              resb 256 ; reserva 256 bytes para formar a pilha
+   375                                      stacktop:

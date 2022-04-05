@@ -1,0 +1,434 @@
+     1                                  segment code
+     2                                  ..start:
+     3 00000000 B8[0000]                    MOV 	AX, data
+     4 00000003 8ED8                        MOV 	DS, AX
+     5 00000005 B8[0000]                    MOV 	AX, stack
+     6 00000008 8ED0                        MOV 	SS,AX
+     7 0000000A BC[0001]                    MOV 	SP,stacktop 
+     8                                  
+     9                                  Main:
+    10 0000000D E89D02                      call PrintNewLine   ;chama a rotina de impressao de nova linha
+    11 00000010 E8A102                      call PrintMenu      ;chama a rotina de impressao do menu
+    12                                      
+    13 00000013 E88B02                      call ReadOperation  ;chama a rotina de leitura da operacao
+    14 00000016 80FA31                      cmp dl, '1'         ;compara se a operacao eh 1
+    15 00000019 0F845500                    je near Soma        ;se for, chama a rotina de soma
+    16                                      
+    17                                      Operation2:         ;rotina de subtracao
+    18 0000001D 80FA32                      cmp dl, '2'         ;compara se a operacao eh 2
+    19 00000020 0F849200                    je near Subtracao   ;se for, chama a rotina de subtracao
+    20                                      
+    21                                      Operation3:         ;rotina de multiplicacao
+    22 00000024 80FA33                      cmp dl, '3'         ;compara se a operacao eh 3
+    23 00000027 0F84CF00                    je near Multi       ;se for, chama a rotina de multiplicacao
+    24                                      
+    25                                      Operation4:         ;rotina de divisao
+    26 0000002B 80FA34                      cmp dl, '4'         ;compara se a operacao eh 4
+    27 0000002E 0F842801                    je near Divisao     ;se for, chama a rotina de divisao
+    28                                  
+    29 00000032 E89B02                      call Quit           ;chama a rotina de saida
+    30                                  
+    31                                  
+    32                                  ReadNumber:
+    33 00000035 B401                        mov ah,1h          ;le um caractere do teclado
+    34 00000037 CD21                        int 21h            ;chama a rotina de leitura do teclado
+    35                                  
+    36 00000039 3C0D                        cmp al,13          ;retorna se detectar que o caractere eh ENTER
+    37 0000003B 7418                        je Fim             ;se for, entao sai do programa
+    38                                      
+    39 0000003D 3C2D                        cmp al, '-'        ;compara se é um sinal negativo
+    40 0000003F 0F841D00                    je near EhNegativo ;se for, chama a rotina de leitura de sinal negativo
+    41                                      
+    42 00000043 2C30                        sub al,30h         ;subtrai o valor de 30 para converter de ASCII para valor decimal
+    43 00000045 88C1                        mov cl,al
+    44                                      
+    45                                      
+    46 00000047 8B05                        mov ax,[di]        ;pega o valor de di
+    47 00000049 BB0A00                      mov bx,10          ;multiplica o valor de 10
+    48 0000004C F7E3                        mul bx             ;multiplica o valor de di por 10
+    49 0000004E 8905                        mov [di],ax        ;atualiza o valor de di
+    50                                  
+    51 00000050 000D                        add [di],cl         ;adiciona o valor de cl ao valor de di
+    52 00000052 E9E0FF                      jmp ReadNumber      ;chama a rotina de leitura do teclado novamente
+    53                                  
+    54                                      Fim:
+    55 00000055 663D01000000                    cmp eax,1      ;compara se o valor de eax eh 1
+    56 0000005B 0F840A00                        je near MultiplicaPorMenosUm        ;se for, chama a rotina de multiplicacao por -1
+    57 0000005F C3                              ret
+    58                                  
+    59                                  EhNegativo:
+    60 00000060 66B801000000                mov eax, 1       ;atribui 1 ao valor de eax
+    61 00000066 E8CCFF                      call ReadNumber  ;chama a rotina de leitura do teclado
+    62                                  
+    63                                  MultiplicaPorMenosUm:
+    64 00000069 B0FF                        mov al, -1     ;atribui -1 ao valor de al
+    65 0000006B 8A1D                        mov bl, [di]   ;pega o valor de di
+    66 0000006D F6EB                        imul bl        ;multiplica o valor de di por -1
+    67 0000006F 8905                        mov [di],ax    ;atualiza o valor de di
+    68                                  
+    69 00000071 C3                          ret
+    70                                  
+    71                                  Soma:
+    72 00000072 BA[6500]                    mov dx,msg5         ;pega o valor de msg5
+    73 00000075 B409                        mov ah,9h           ;chama a rotina de impressao
+    74 00000077 CD21                        int 21h             ;chama a rotina de impressao
+    75 00000079 BF[0000]                    mov di, num1        ;pega o valor de num1
+    76 0000007C E8B6FF                      call ReadNumber     ;chama a rotina de leitura do teclado
+    77                                  
+    78 0000007F BA[8200]                    mov dx,msg6         ;pega o valor de msg6
+    79 00000082 B409                        mov ah,9h           ;chama a rotina de impressao
+    80 00000084 CD21                        int 21h             ;chama a rotina de impressao
+    81 00000086 BF[0200]                    mov di, num2        ;pega o valor de num2
+    82 00000089 E8A9FF                      call ReadNumber     ;chama a rotina de leitura do teclado
+    83                                      
+    84 0000008C A1[0200]                    mov ax,[num2]       ;pega o valor de num2
+    85 0000008F 0306[0000]                  add ax,[num1]       ;soma o valor de num1 ao valor de num2
+    86 00000093 A3[0400]                    mov [result],ax     ;atualiza o valor de result
+    87                                  
+    88 00000096 BA[9E00]                    mov dx,msg7         ;pega o valor de msg7
+    89 00000099 B409                        mov ah,9h           ;chama a rotina de impressao
+    90 0000009B CD21                        int 21h             ;chama a rotina de impressao
+    91                                  
+    92 0000009D 8B16[0400]                  mov dx,[result]     ;pega o valor de result
+    93 000000A1 81CA0000                    or dx, 0            ;verifica se o resultado eh maior que 255
+    94 000000A5 0F889500                    js near label1      ;se for, chama a rotina de impressao de resultado maior que 255
+    95                                  
+    96 000000A9 8B16[0400]                  mov dx,[result]     ;pega o valor de result
+    97 000000AD E81C01                      call imprimenumero  ;chama a rotina de impressao de numero
+    98                                  
+    99 000000B0 E8FA01                      call PrintNewLine   ;chama a rotina de impressao de nova linha
+   100 000000B3 E81A02                      call Quit           ;chama a rotina de saida do programa
+   101                                      
+   102                                  Subtracao:
+   103 000000B6 BA[6500]                    mov dx,msg5         ;pega o valor de msg5
+   104 000000B9 B409                        mov ah,9h           ;chama a rotina de impressao
+   105 000000BB CD21                        int 21h             ;chama a rotina de impressao
+   106 000000BD BF[0000]                    mov di, num1        ;pega o valor de num1
+   107 000000C0 E872FF                      call ReadNumber     ;chama a rotina de leitura do teclado
+   108                                  
+   109 000000C3 BA[8200]                    mov dx,msg6         ;pega o valor de msg6
+   110 000000C6 B409                        mov ah,9h           ;chama a rotina de impressao
+   111 000000C8 CD21                        int 21h             ;chama a rotina de impressao
+   112 000000CA BF[0200]                    mov di, num2        ;pega o valor de num2
+   113 000000CD E865FF                      call ReadNumber     ;chama a rotina de leitura do teclado
+   114                                      
+   115 000000D0 A1[0000]                    mov ax,[num1]       ;pega o valor de num1
+   116 000000D3 2B06[0200]                  sub ax,[num2]       ;subtrai o valor de num2 do valor de num1
+   117 000000D7 A3[0400]                    mov [result],ax     ;atualiza o valor de result
+   118                                  
+   119 000000DA BA[9E00]                    mov dx,msg7         ;pega o valor de msg7
+   120 000000DD B409                        mov ah,9h           ;chama a rotina de impressao
+   121 000000DF CD21                        int 21h             ;chama a rotina de impressao
+   122                                  
+   123 000000E1 8B16[0400]                  mov dx,[result]     ;pega o valor de result
+   124 000000E5 81CA0000                    or dx, 0            ;verifica se o resultado eh maior que 255
+   125 000000E9 0F885100                    js near label1      ;se for, chama a rotina de impressao de resultado maior que 255
+   126                                  
+   127 000000ED 8B16[0400]                  mov dx,[result]     ;pega o valor de result
+   128 000000F1 E8D800                      call imprimenumero  ;chama a rotina de impressao de numero
+   129 000000F4 E8B601                      call PrintNewLine   ;chama a rotina de impressao de nova linha
+   130 000000F7 E8D601                      call Quit           ;chama a rotina de saida do programa
+   131                                  
+   132                                  Multi:
+   133 000000FA BA[6500]                    mov dx,msg5         ;pega o valor de msg5
+   134 000000FD B409                        mov ah,9h           ;chama a rotina de impressao
+   135 000000FF CD21                        int 21h             ;chama a rotina de impressao
+   136 00000101 BF[0000]                    mov di, num1        ;pega o valor de num1
+   137 00000104 E82EFF                      call ReadNumber     ;chama a rotina de leitura do teclado
+   138                                  
+   139 00000107 BA[8200]                    mov dx,msg6         ;pega o valor de msg6
+   140 0000010A B409                        mov ah,9h           ;chama a rotina de impressao
+   141 0000010C CD21                        int 21h             ;chama a rotina de impressao
+   142 0000010E BF[0200]                    mov di, num2        ;pega o valor de num2
+   143 00000111 E821FF                      call ReadNumber     ;chama a rotina de leitura do teclado
+   144                                  
+   145 00000114 A1[0000]                    mov ax,[num1]       ;pega o valor de num1
+   146 00000117 8B1E[0200]                  mov bx,[num2]       ;pega o valor de num2
+   147 0000011B F7E3                        mul bx              ;multiplica o valor de num1 com o valor de num2
+   148                                  
+   149 0000011D A3[0400]                    mov [result],ax     ;atualiza o valor de result
+   150                                  
+   151 00000120 BA[9E00]                    mov dx,msg7         ;pega o valor de msg7
+   152 00000123 B409                        mov ah,9h           ;chama a rotina de impressao
+   153 00000125 CD21                        int 21h             ;chama a rotina de impressao
+   154                                  
+   155 00000127 8B16[0400]                  mov dx,[result]     ;pega o valor de result
+   156 0000012B 81CA0000                    or dx, 0            ;verifica se o resultado eh maior que 255
+   157 0000012F 780D                        js label1           ;se for, chama a rotina de impressao de resultado maior que 255
+   158                                      
+   159 00000131 8B16[0400]                  mov dx,[result]     ;pega o valor de result
+   160                                  
+   161 00000135 E89400                      call imprimenumero  ;chama a rotina de impressao de numero
+   162                                              
+   163 00000138 E87201                      call PrintNewLine   ;chama a rotina de impressao de nova linha
+   164                                  
+   165 0000013B E89201                      call Quit
+   166                                      
+   167                                  label1:
+   168 0000013E 8915                        mov [di], dx        ;atualiza o valor de di
+   169 00000140 B0FF                        mov al, -1          ;atribui -1 ao valor de al
+   170 00000142 8A1D                        mov bl, [di]        ;pega o valor de di
+   171 00000144 F6EB                        imul bl             ;multiplica o valor de di por -1
+   172 00000146 8905                        mov [di],ax         ;atualiza o valor de di
+   173                                  
+   174 00000148 BA[2000]                    mov dx,sinal        ;imprime o sinal
+   175 0000014B B409                        mov ah,9h           ;chama a rotina de impressao
+   176 0000014D CD21                        int 21h
+   177                                      
+   178 0000014F 8B15                        mov dx,[di]
+   179 00000151 E87800                      call imprimenumero  ;chama a rotina de impressao de numero
+   180 00000154 E85601                      call PrintNewLine   ;chama a rotina de impressao de nova linha
+   181                                  
+   182 00000157 E97601                      jmp Quit
+   183                                  
+   184                                  
+   185                                  
+   186                                  Divisao:
+   187 0000015A BA[6500]                    mov dx,msg5         ;pega o valor de msg5
+   188 0000015D B409                        mov ah,9h           ;chama a rotina de impressao
+   189 0000015F CD21                        int 21h             ;chama a rotina de impressao
+   190 00000161 BF[0000]                    mov di, num1        ;pega o valor de num1
+   191 00000164 E8CEFE                      call ReadNumber     ;chama a rotina de leitura do teclado
+   192                                  
+   193 00000167 BA[8200]                    mov dx,msg6         ;pega o valor de msg6
+   194 0000016A B409                        mov ah,9h           ;chama a rotina de impressao
+   195 0000016C CD21                        int 21h             ;chama a rotina de impressao
+   196 0000016E BF[0200]                    mov di, num2        ;pega o valor de num2
+   197 00000171 E8C1FE                      call ReadNumber     ;chama a rotina de leitura do teclado
+   198                                  
+   199 00000174 A1[0000]                    mov ax,[num1]       ;pega o valor de num1
+   200 00000177 8A1E[0200]                  mov bl,[num2]       ;pega o valor de num2
+   201 0000017B F6FB                        idiv bl              ;divide o valor de num1 por num2
+   202 0000017D A2[0400]                    mov [result],al     ;atualiza o valor de result
+   203 00000180 88E5                        mov ch, ah          ;pega o resto da divisao
+   204 00000182 80C530                      add ch,30h          ;adiciona 30 ao resto da divisao para converter de ASCII para valor decimal
+   205                                      
+   206 00000185 BA[9E00]                    mov dx,msg7         ;pega o valor de msg7
+   207 00000188 B409                        mov ah,9h           ;chama a rotina de impressao
+   208 0000018A CD21                        int 21h             ;chama a rotina de impressao
+   209                                  
+   210 0000018C 8B16[0400]                  mov dx,[result]     ;pega o valor de result
+   211 00000190 A0[0000]                    mov al,[num1]
+   212 00000193 3206[0200]                  xor al,[num2]
+   213 00000197 7817                        js label2               ;se for, entao
+   214                                  
+   215 00000199 8B16[0400]                  mov dx,[result]     ;pega o valor de result
+   216 0000019D E82C00                      call imprimenumero  ;chama a rotina de impressao de numero
+   217                                      
+   218 000001A0 BA[AC00]                    mov dx,msg8         ;pega o valor de msg8
+   219 000001A3 B409                        mov ah,9h           ;chama a rotina de impressao
+   220 000001A5 CD21                        int 21h             ;chama a rotina de impressao
+   221                                  
+   222 000001A7 B402                        mov ah,2h           ;chama a rotina de impressao
+   223 000001A9 88EA                        mov dl,ch           ;pega o valor de ch, que contem o resto da divisao
+   224 000001AB CD21                        int 21h             ;chama a rotina de impressao 
+   225                                  
+   226 000001AD E82001                      call Quit           ;chama a rotina de saida do programa
+   227                                  
+   228                                  label2:
+   229 000001B0 8915                        mov [di], dx        ;atualiza o valor de di
+   230 000001B2 B0FF                        mov al, -1          ;atribui -1 ao valor de al
+   231 000001B4 8A1D                        mov bl, [di]        ;pega o valor de di
+   232 000001B6 F6EB                        imul bl             ;multiplica o valor de di por -1
+   233 000001B8 8905                        mov [di],ax         ;atualiza o valor de di
+   234                                  
+   235 000001BA BA[2000]                    mov dx,sinal        ;imprime o sinal
+   236 000001BD B409                        mov ah,9h           ;chama a rotina de impressao
+   237 000001BF CD21                        int 21h
+   238                                      
+   239 000001C1 8B15                        mov dx,[di]
+   240 000001C3 E80600                      call imprimenumero  ;chama a rotina de impressao de numero
+   241                                     
+   242 000001C6 E8E400                      call PrintNewLine   ;chama a rotina de impressao de nova linha
+   243                                  
+   244 000001C9 E90401                      jmp Quit
+   245                                  
+   246                                  imprimenumero:
+   247                                  ; Save the context
+   248 000001CC 9C                      		PUSHF
+   249 000001CD 50                      		PUSH 	AX
+   250 000001CE 53                      		PUSH 	BX
+   251 000001CF 51                      		PUSH	CX
+   252 000001D0 52                      		PUSH 	DX
+   253                                  				
+   254 000001D1 BF[B900]                		MOV 	DI,saida
+   255 000001D4 E80D00                  		CALL 	bin2ascii		
+   256                                  
+   257 000001D7 BA[B900]                		MOV 	DX,saida
+   258 000001DA B409                    		MOV 	AH,9h
+   259 000001DC CD21                    		INT 	21h         
+   260                                  		
+   261                                  ; Upgrade the context
+   262 000001DE 5A                      		POP 	DX
+   263 000001DF 59                      		POP 	CX
+   264 000001E0 5B                      		POP		BX
+   265 000001E1 58                      		POP 	AX
+   266 000001E2 9D                      		POPF
+   267 000001E3 C3                      		RET
+   268                                  
+   269                                  bin2ascii:
+   270 000001E4 81FA0A00                		CMP		DX,10
+   271 000001E8 7215                    		JB		Uni
+   272 000001EA 81FA6400                		CMP		DX,100 
+   273 000001EE 7216                    		JB		Des
+   274 000001F0 81FAE803                		CMP		DX,1000
+   275 000001F4 7221                    		JB		Cen
+   276 000001F6 81FA1027                		CMP		DX,10000
+   277 000001FA 723A                    		JB		Mil
+   278 000001FC E96500                  		JMP		Dezmil
+   279                                  			
+   280                                  Uni:	
+   281 000001FF 81C23000                		ADD		DX,0x0030
+   282 00000203 8815                    		MOV 	byte [DI],DL
+   283 00000205 C3                      		RET
+   284                                  Des:
+   285 00000206 89D0                    		MOV 	AX,DX
+   286 00000208 B30A                    		MOV		BL,10
+   287 0000020A F6F3                    		div		BL
+   288 0000020C 80C430                  		ADD		AH,0x30
+   289 0000020F 0430                    		ADD		AL,0x30
+   290 00000211 8805                    		MOV 	byte [DI],AL
+   291 00000213 886501                  		MOV 	byte [DI+1],AH
+   292 00000216 C3                      		RET
+   293                                  Cen:		
+   294 00000217 89D0                    		MOV 	AX,DX
+   295 00000219 B364                    		MOV		BL,100
+   296 0000021B F6F3                    		DIV		BL
+   297 0000021D 0430                    		ADD		AL,0x30
+   298 0000021F 8805                    		MOV 	byte [DI],AL
+   299 00000221 88E0                    		MOV 	AL,AH
+   300 00000223 25FF00                  		AND		AX,0x00FF
+   301 00000226 B30A                    		MOV		BL,10
+   302 00000228 F6F3                    		DIV		BL
+   303 0000022A 80C430                  		ADD		AH,0x30
+   304 0000022D 0430                    		ADD		AL,0x30
+   305 0000022F 884501                  		MOV 	byte [DI+1],AL		
+   306 00000232 886502                  		MOV 	byte [DI+2],AH
+   307 00000235 C3                      		RET
+   308                                  Mil:		
+   309 00000236 89D0                    		MOV 	AX,DX
+   310 00000238 BA0000                  		MOV     DX,0
+   311 0000023B BBE803                  		MOV		BX,1000
+   312 0000023E F7F3                    		DIV		BX
+   313 00000240 0430                    		ADD		AL,0x30
+   314 00000242 8805                    		MOV 	byte [DI],AL
+   315 00000244 89D0                    		MOV 	AX,DX
+   316 00000246 B364                    		MOV		BL,100
+   317 00000248 F6F3                    		DIV		BL
+   318 0000024A 0430                    		ADD		AL,0x30
+   319 0000024C 884501                  		MOV 	byte [DI+1],AL		
+   320 0000024F 88E0                    		MOV 	AL,AH
+   321 00000251 25FF00                  	    AND     AX,0x00FF
+   322 00000254 B30A                    		MOV		BL,10
+   323 00000256 F6F3                    		DIV		BL
+   324 00000258 80C430                  		ADD		AH,0x30
+   325 0000025B 0430                    		ADD		AL,0x30
+   326 0000025D 884502                  		MOV 	byte [DI+2],AL		
+   327 00000260 886503                  		MOV 	byte [DI+3],AH
+   328 00000263 C3                      		RET
+   329                                  Dezmil:
+   330 00000264 89D0                    		MOV 	AX,DX
+   331 00000266 BA0000                  		MOV     DX,0
+   332 00000269 BB1027                  		MOV		BX,10000
+   333 0000026C F7F3                    		DIV		BX
+   334 0000026E 0430                    		ADD		AL,0x30
+   335 00000270 8805                    		MOV 	byte [DI],AL
+   336 00000272 89D0                    		MOV		AX,DX		
+   337 00000274 BA0000                  		MOV     DX,0
+   338 00000277 BBE803                  		MOV		BX,1000
+   339 0000027A F7F3                    		DIV		BX
+   340 0000027C 0430                    		ADD		AL,0x30
+   341 0000027E 884501                  		MOV 	byte [DI+1],AL
+   342 00000281 89D0                    		MOV 	AX,DX
+   343 00000283 B364                    		MOV		BL,100
+   344 00000285 F6F3                    		DIV		BL
+   345 00000287 0430                    		ADD		AL,0x30
+   346 00000289 884502                  		MOV 	byte [DI+2],AL		
+   347 0000028C 88E0                    		MOV 	AL,AH
+   348 0000028E 25FF00                  	    AND     AX,0x00FF
+   349 00000291 B30A                    		MOV		BL,10
+   350 00000293 F6F3                    		DIV		BL
+   351 00000295 80C430                  		ADD		AH,0x30
+   352 00000298 0430                    		ADD		AL,0x30
+   353 0000029A 884503                  		MOV 	byte [DI+3],AL		
+   354 0000029D 886504                  		MOV 	byte [DI+4],AH
+   355 000002A0 C3                      		RET    
+   356                                  
+   357                                  ReadOperation:
+   358 000002A1 B401                        mov ah, 1h          ;chama a rotina de leitura do teclado
+   359 000002A3 CD21                        int 21h             ;chama a rotina de leitura do teclado
+   360 000002A5 88C2                        mov dl, al          ;pega o valor de al, que contem o caractere digitado
+   361 000002A7 C3                      	ret			        ;retorna para o programa principal
+   362                                  
+   363                                  Print:
+   364 000002A8 B409                        mov ah,0x9          ;chama a rotina de impressao
+   365 000002AA CD21                        int 0x21            ;chama a rotina de impressao
+   366 000002AC C3                          ret                 ;retorna para o programa principal
+   367                                  
+   368                                  PrintNewLine:
+   369 000002AD BA[B600]                	mov dx,CRLF         ;pega o valor de CRLF que contem o caractere de nova linha
+   370 000002B0 E8F5FF                      call Print          ;chama a rotina de impressao
+   371 000002B3 C3                          ret                 ;retorna para o programa principal
+   372                                  
+   373                                  
+   374                                  PrintMenu:
+   375 000002B4 BA[2400]                    mov dx, msg1		; Mensagem 1
+   376 000002B7 E8EEFF                      call Print      	; chama a rotina de impressao
+   377                                      
+   378 000002BA BA[3000]                    mov dx,msg2		    ; Mensagem 2
+   379 000002BD E8E8FF                      call Print      	; chama a rotina de impressao
+   380                                      
+   381 000002C0 BA[4100]                    mov dx, msg3		; Mensagem 3
+   382 000002C3 E8E2FF                      call Print      	; chama a rotina de impressao
+   383                                      
+   384 000002C6 BA[5600]                    mov dx, msg4		; Mensagem 4
+   385 000002C9 E8DCFF                      call Print      	; chama a rotina de impressao
+   386 000002CC E8DEFF                      call PrintNewLine   ; chama a rotina de impressao de nova linha
+   387 000002CF C3                          ret                 ; retorna para o programa principal
+   388                                      
+   389                                  Quit:
+   390 000002D0 B44C                        MOV AH,4CH  ; retorna para o DOS com código 0
+   391 000002D2 CD21                        INT 21h     ; chama a rotina de retorno para o DOS
+   392                                  
+   393                                  
+   394                                  segment data
+   395                                      CR 		EQU		13
+   396                                      LF 		EQU		10
+   397 00000000 0000                        num1 dw 0           ;numero 1
+   398 00000002 0000                        num2 dw 0           ;numero 2
+   399 00000004 0000                        result dw 0         ;resultado
+   400 00000006 0000                        resto dw 0          ;resto
+   401 00000008 0000                        ehnegativo1 dw 0     ;eh negativo 1
+   402 0000000A 0000                        ehnegativo2 dw 0     ;eh negativo 2
+   403 0000000C 0A0D54455354452024          teste db 10,13 , "TESTE $"
+   404 00000015 0A0D54455354452032-         teste2 db 10,13 , "TESTE 2 $"
+   405 0000001E 2024               
+   406 00000020 0A0D2D24                    sinal db 10,13 , "-$"
+   407 00000024 0A0D31202D20534F4D-         msg1 db 10,13, "1 - SOMA $"
+   408 0000002D 412024             
+   409 00000030 0A0D32202D20535542-     	msg2 db 10,13, "2 - SUBTRACAO $"
+   410 00000039 54524143414F2024   
+   411 00000041 0A0D33202D204D554C-     	msg3 db 10,13, "3 - MULTIPLICACAO $"
+   412 0000004A 5449504C4943414341-
+   413 00000053 4F2024             
+   414 00000056 0A0D34202D20444956-     	msg4 db 10,13, "4 - DIVISAO $"
+   415 0000005F 4953414F2024       
+   416 00000065 0A0D44696769746520-         msg5 db 10,13, "Digite o primeiro numero: $"
+   417 0000006E 6F207072696D656972-
+   418 00000077 6F206E756D65726F3A-
+   419 00000080 2024               
+   420 00000082 0A0D44696769746520-         msg6 db 10,13, "Digite o segundo numero: $"
+   421 0000008B 6F20736567756E646F-
+   422 00000094 206E756D65726F3A20-
+   423 0000009D 24                 
+   424 0000009E 0A0D526573756C7461-         msg7 db 10,13, "Resultado: $"
+   425 000000A7 646F3A2024         
+   426 000000AC 0A0D526573746F3A20-         msg8 db 10,13, "Resto: $"
+   427 000000B5 24                 
+   428 000000B6 0D0A24                      CRLF db 0DH,0AH,'$'
+   429 000000B9 <res 00000005>              saida: 		resb 5 
+   430 000000BE 0D0A24                              db CR,LF,'$'
+   431                                  
+   432                                  segment stack stack
+   433 00000000 <res 00000100>              resb 256 ; reserva 256 bytes para formar a pilha
+   434                                      stacktop:
