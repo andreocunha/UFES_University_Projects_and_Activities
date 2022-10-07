@@ -1,0 +1,20 @@
+{
+  "placeholder": "Escreva algo aqui...",
+  "undo": "Desfazer",
+  "redo": "Refazer",
+  "h1": "Título 1",
+  "h2": "Título 2",
+  "h3": "Título 3",
+  "h4": "Título 4",
+  "img": "Link da imagem",
+  "link": "Link",
+  "code": "Código",
+  "save": "Salvar",
+  "preview": "Visualizar",
+  "singleColumn": "Coluna única",
+  "doubleColumn": "Coluna dupla",
+  "fullscreenOn": "Ativar tela cheia",
+  "fullscreenOff": "Desativar tela cheia",
+  "addImgLink": "Link da imagem",
+  "addImg": "Enviar imagem"
+}
