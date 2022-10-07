@@ -1,0 +1,57 @@
+Sebesta, Seção 5.4.3
+
+5.4.3 Vinculações de armazenamento e tempo de vida
+O caráter fundamental de uma linguagem de programação imperativa é em grande parte determinado pelo projeto das vinculações de armazenamento para suas variáveis. Dessa forma, é importante ter um claro entendimento dessas   
+obtida, de alguma forma, de um conjunto de células de memória disponíveis.
+
+Esse processo é chamado de alocação. Liberação é o processo de colocar uma célula de memória que foi desvinculada de uma variável de volta ao conjunto de células de memória disponíveis. O tempo de vida de uma variável é o durante o qual ela está vinculada a uma posição específica da memória. Então, o tempo de vida de uma variável começa quando ela é vinculada a uma célula específica e termina quando ela é desvinculada dessa célula. Para investigar as vinculações de armazenamento das variáveis, é conveniente separar variáveis escalares (não estruturadas) em quatro categorias, de acordo com seus tempos de vida. Essas categorias são estáticas, dinâmicas da pilha, dinâmicas do  onte explícitas e dinâmicas do monte implícitas. Nas seções a seguir, discutimos os significados das quatro   ategorias, com seus propósitos, vantagens e desvantagens.
+
+5.4.3.1 Variáveis estáticas
+Variáveis estáticas são vinculadas a células de memória antes do início da execução de um programa e permanecem vinculadas a essas mesmas células até que a execução do programa termine. Variáveis vinculadas estaticamente
+têm diversas aplicações valiosas em programação. Variáveis acessíveis globalmente são usadas ao longo da execução  e um programa, tornando necessário tê-las vinculadas ao mesmo armazenamento durante essa execução. Algumas
+vezes, é conveniente ter subprogramas sensíveis ao histórico. Tal subprograma deve ter variáveis locais estáticas.
+Outra vantagem das variáveis estáticas é a eficiência. Todo o endereçamento de variáveis estáticas pode ser direto7 ; outros tipos de variáveis geralmente requerem endereçamento indireto, que é mais lento. Além disso, não há sobrecarga em tempo de execução para a alocação e a liberação de variáveis estáticas, apesar de esse tempo ser normalmente negligenciável. Uma desvantagem da vinculação estática ao armazenamento é a redução da flexibilidade; em particular, uma linguagem que tem apenas variáveis estáticas não permite o uso de subprogramas recursivos. Outra desvantagem é o armazenamento não ser compartilhado entre variáveis. Por exemplo, suponha que um programa tem dois subprogramas que requerem grandes vetores. Suponha, também, que os dois subprogramas nunca estão ativos ao mesmo tempo. Se os vetores são estáticos, eles não podem compartilhar o mesmo armazenamento para seus vetores. C e C++ permitem aos programadores incluírem o especificador static a uma definição de variável em uma função, fazendo as variáveis definidas serem estáticas. Note que, quando um modificador static aparece na declaração de uma variável em uma definição de classe em C++, Java e C#, seu significado tem apenas uma conexão indireta com o conceito
+de tempo de vida da variável. Nesse contexto, significa que a variável é de classe, em vez de ser de instância. As variáveis de classe são criadas algum tempo antes de a classe ser instanciada pela primeira vez. Esse uso múltiplo
+de uma palavra reservada pode ser confuso, particularmente para quem está aprendendo a linguagem.
+
+5.4.3.2 Variáveis dinâmicas da pilha
+Variáveis dinâmicas da pilha são aquelas cujas vinculações de armazenamento são criadas quando suas sentenças de declaração são elaboradas, mas cujos tipos são estaticamente vinculados. A elaboração de tal declaração se refere à alocação do armazenamento e ao processo de vinculação indicado pela declaração, que ocorre quando a execução  lcança o código com o qual a declaração está anexada. Logo, a elaboração ocorre apenas em tempo de execução. Por exemplo, as declarações de variáveis que aparecem no início de um método Java são elaboradas quando o método é chamado e as variáveis definidas por essas declarações são liberadas quando o método completa sua execução.
+
+Como seu nome indica, as variáveis dinâmicas da pilha são alocadas a partir da pilha de tempo de execução.
+Algumas linguagens – como C++ e Java – permitem declarações de variáveis ocorrerem em qualquer lugar onde uma sentença poderia ocorrer. Em algumas implementações dessas linguagens, todas as variáveis dinâmicas da
+pilha declaradas em uma função ou em um método (não incluindo as declaradas em blocos aninhados) podem ser vinculadas ao armazenamento no início da execução da função ou do método, mesmo que as declarações de algumas
+dessas variáveis não apareçam no início. Nesses casos, a variável se torna visível na declaração, mas a vinculação ao armazenamento (e a inicialização, se for especificada na declaração) ocorre quando a função ou o método inicia sua execução. O fato de a vinculação do armazenamento ocorrer antes de ele se tornar visível não afeta a semântica da linguagem.
+
+Para serem úteis, ao menos na maioria dos casos, os programas recursivos requerem armazenamento dinâmico local, de forma que cada cópia ativa do subprograma recursivo tenha sua própria versão das variáveis locais. Essas necessidades são convenientemente satisfeitas pelas variáveis dinâmicas da pilha. Mesmo na ausência da recursão, ter armazenamento local dinâmico na pilha para subprogramas tem méritos, porque todos os subprogramas compartilham o mesmo espaço de memória para suas variáveis locais. As desvantagens, relativas às variáveis estáticas, são a  sobrecarga em tempo de execução da alocação e liberação, acessos mais lentos em função do endereçamento indireto necessário, e o fato de os subprogramas não poderem ser sensíveis ao histórico de execução. O tempo necessário para
+alocar e liberar variáveis dinâmicas da pilha não é significativo, porque todas as variáveis dinâmicas da pilha declaradas no início de um subprograma são alocadas e liberadas juntas, em vez de em operações separadas.
+O Fortran 95 permite aos implementadores usarem variáveis dinâmicas da pilha para variáveis locais, mas inclui uma sentença Save list que permite ao programador especificar algumas ou todas as variáveis (aquelas na lista) no subprograma no qual Save é colocado como estáticas. Em Java, C++ e C#, as variáveis definidas em métodos são, por padrão, dinâmicas da pilha. Em Ada, todas as variáveis que não são do monte e são definidas em subprogramas são dinâmicas da pilha.
+
+Todos os atributos, exceto os de armazenamento, são estaticamente vinculados às variáveis escalares dinâmicas da pilha. Esse não é o caso para alguns tipos estruturados, conforme discutido no Capítulo 6. A implementação dos
+processos de alocação e liberação para variáveis dinâmicas da pilha é discutida no Capítulo 10.
+
+5.4.3.3 Variáveis dinâmicas do monte explícitas
+Variáveis dinâmicas do monte explícitas são células de memória não nomeadas (abstratas) alocadas e liberadas por instruções explícitas em tempo de execução pelo programador. Essas variáveis, alocadas a partir do monte e liberadas para o monte, podem apenas ser referenciadas por ponteiros ou variáveis de referência. O monte (heap) é  ma coleção de células de armazenamento cuja organização é altamente desorganizada, por causa da imprevisibilidade de seu uso. O ponteiro ou a variável de referência usado para acessar uma variável dinâmica do monte explícita é  riado como qualquer outra variável escalar. Uma variável dinâmica do monte explícita é criada ou por meio de um  
+uma chamada a um subprograma de sistema fornecido para esse propósito (por exemplo, em C).
+
+Em C++, o operador de alocação, chamado new, usa um nome de tipo como seu operando. Quando executado, uma variável dinâmica do monte explícita do tipo do operando é criada e um ponteiro a ela é retornado. Como uma variável dinâmica do monte explícita é vinculada a um tipo em tempo de compilação, essa vinculação é estática. Entretanto, tais variáveis são vinculadas ao armazenamento no momento em que elas são criadas, durante o tempo de
+execução. Além de um subprograma ou operador criar variáveis dinâmicas do monte explícitas, algumas linguagens incluem um subprograma ou operador para explicitamente destruí-las.
+
+Como um exemplo de variáveis dinâmicas do monte explícitas, considere o segmento de código em C++:
+
+int *intnode; // Cria um ponteiro
+intnode = new int; // Cria a variável dinâmica do monte
+...
+delete intnode; // Libera a variável dinâmica do monte
+ // para qual intnode aponta
+
+Nesse exemplo, uma variável dinâmica do monte explícita do tipo int é criada pelo operador new. Essa variável pode então ser referenciada por meio do ponteiro intnode. Posteriormente, a variável é liberada pelo operador delete. C++ requer o operador de liberação explícita delete, porque a linguagem não usa recuperação implícita de armazenamento, como a coleta de lixo.
+
+Em Java, todos os dados, exceto os escalares primitivos, são objetos. Objetos Java são dinâmicos do monte explícitos e acessados por meio de variáveis de referência. Java não tem uma maneira de destruir explicitamente uma
+variável dinâmica do monte; em vez disso, a coleta de lixo implícita é usada.
+
+C# tem tanto objetos dinâmicos do monte explícitos quanto dinâmicos da pilha, dos quais todos são implicitamente liberados. Além disso, C# também oferece suporte a ponteiros no estilo de C++. Tais ponteiros são usados para
+referenciar o monte, a pilha e mesmo variáveis estáticas e objetos. Esses ponteiros têm os mesmos perigos daqueles em C++, e os objetos que eles referenciam no monte não são implicitamente liberados. Ponteiros são incluídos em
+C# para permitir que os componentes C# interoperem com componentes C e C++. Para desencorajar seu uso, o cabeçalho de qualquer método que define um ponteiro deve incluir a palavra reservada unsafe.
+
+Variáveis dinâmicas do monte explícitas são usadas para construir estruturas dinâmicas, como listas ligadas e árvores, que precisam crescer e/ou diminuir durante a execução. Tais estruturas podem ser construídas de maneira
+conveniente usando ponteiros ou referências e variáveis dinâmicas do monte explícitas. As desvantagens das  variáveis dinâmicas do monte explícitas são a dificuldade de usar ponteiros e variáveis de referência corretamente, o custo de referências às variáveis e a complexidade da implementação do gerenciamento de armazenamento. Esse é essencialmente o problema do gerenciamento do monte, que é custoso e complicado. Métodos de implementação para variáveis dinâmicas do monte explícitas são amplamente discutidos no Capítulo 6.

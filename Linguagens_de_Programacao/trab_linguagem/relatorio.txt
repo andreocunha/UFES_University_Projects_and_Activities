@@ -1,0 +1,146 @@
+Linguagem de programação DART
+
+Criado pelo Google, o Dart é altamente versátil, podendo ser utilizado no desenvolvimento de:
+
+Aplicativos mobile e desktop;
+Scripts;
+Back-end.
+Para isso, ele utiliza mais de uma plataforma. Cada uma delas traz os recursos necessários para que seja possível desenvolver em cada um dos diferentes ambientes.
+
+Qual a origem do Dart?
+A primeira aparição do Dart foi na Conferência GOTO, que ocorreu na Dinamarca em outubro de 2011. Seus criadores foram Lars Bak, que já havia contribuído na criação do Google Chrome, e Kasper Lund, um engenheiro de softwares.
+
+Inicialmente, o objetivo dessa nova linguagem era a de substituir a JavaScript e se tornar a mais utilizada pelos navegadores. Porém, o Dart ainda está em processo de aprimoramentos e adaptações e a tendência é que as duas continuem rodando simultaneamente por um bom tempo.
+
+Antes de ser aprovado, o Dart precisou passar pela avaliação de um comitê técnico, o TC52 Ecma International. Foi ele que certificou que a linguagem utiliza todos os padrões e que é aceita nos navegadores modernos.
+
+Em 2013, foi lançada a primeira versão estável, nomeada Dart 1.0. Em 2018, ele sofreu um reboot, surgindo o Dart 2.0, otimizado para o desenvolvimento no Client-Side para web e mobile.
+
+Esse aprimoramento tornou o desenvolvimento com essa linguagem mais agradável e produtivo – atraindo ainda mais a atenção dos profissionais de Tecnologia da Informação.
+
+Atualmente, os principais exemplos de utilização da linguagem que podemos dar estão no próprio Google Ads:
+
+Quais as soluções disponibilizadas pelo Dart?
+Como o Dart funciona em diferentes plataformas e possui diversos propósitos, ele disponibiliza 2 soluções. São elas:
+
+1 – Dart Native
+É utilizado para o desenvolvimento mobile, desktop e de servidor, entre outros. Para realizar a produção de código, ele inclui a máquina virtual do Dart com compilação JIT (just-in-time) e compilador AOT (ahead-of-time).
+
+Ele reúne o código para Dart de forma nativa, seja em ARM ou X64.
+
+2 – Dart Web
+Tem como foco o desenvolvimento web e traz o dartdevc, que compila o código para o desenvolvimento, e o dart2js, que é indicado para fazer o build para produção.
+
+Neste caso, o resultado final é um Javascript, que será facilmente interpretado por qualquer navegador – visto que essa linguagem é universal.
+
+O que é necessário para desenvolver utilizando o Dart?
+Depende do objetivo do desenvolvedor. Para criar aplicações para web, server ou script de comando, por exemplo, recomenda-se utilizar o Dart SDK, que é uma espécie de biblioteca e ferramenta de linha de comando.
+
+Se o objetivo é o desenvolvimento mobile, essa ferramenta não se faz necessária. Basta fazer a instalação do Flutter, um framework para desenvolvimento mobile que permite fazer aplicações híbridas, mas com performance de aplicações nativas.
+
+O Flutter também foi criado pelo Google, o que justifica a facilidade dos dois atuarem juntos. Para realizar a etapa de codificação, é possível utilizar extensões e plugins que são compatíveis com a linguagem, como:
+
+IntelliJ IDEA: Desenvolvido pela JetBrail, é um ambiente de desenvolvimento integrado escrito em Java que permite desenvolver softwares para computador;
+VSCode: O Visual Studio Code é um editor de código-fonte desenvolvido pela Microsoft para rodar em Windows, MacOS e Linux. Oferece diversas funcionalidades, como complementação inteligente de código e controle Git incorporado;
+Sublime: Considerado um editor de texto sofisticado, trata-se de um software multiplataforma escrito em linguagem Python que permite editar código-fonte de forma simples;
+Atom: Esse editor de texto de código aberto foi desenvolvido pelo GitHub sob a licença MIT. Está disponível para as plataformas Windows, Linux e MacOS e permite a instalação de extensões criadas com Node.js;
+VIM: Trata-se de um editor de texto que possui variadas configurações para criar e alterar com eficiência qualquer tipo de código.
+Quais os desafios que a linguagem Dart teve que superar?
+Um dos fatores que afastaram os desenvolvedores quando o Dart foi criado foi o fato do Google ter sido acusado de incentivar a fragmentação das plataformas web. Junto a isso, a empresa tinha fama de abandonar seus produtos de forma abrupta, o que poderia prejudicar o trabalho caso isso ocorresse.
+
+Além disso, os profissionais não viam sentido em trocar uma linguagem consolidada como o JavaScript por outra pouco conhecida.
+
+Porém, o sucesso do Flutter abriu caminho para que os profissionais dessem uma chance ao Dart. Uma vez que testaram a linguagem, se depararam com uma opção muito mais simples de lidar.
+
+Outro detalhe é que o Google abandonou totalmente a ideia do Dart substituir o JavaScript. Com isso, criou mecanismos para que consigam atuar juntos, tornando-o uma opção agradável e amigável.
+—
+Quem quiser aprender um pouco mais sobre Dart ou brincar com a linguagem, existe uma ferramenta open source que roda em qualquer navegador e foi desenvolvida especialmente para essa finalidade: o DartPad. Vale a pena testar!
+
+--------------------------------------------------------------------------------------------------------------------
+Perguntas sobre o Dart
+
+1. Como instalar e começar a usar? 
+Para começar a usar o Dart, é necessário instalar o Dart SDK.
+
+2. Quais são os processos de tradução utilizados? 
+O Dart possui um processo de tradução que é chamado de Dart2JS.
+
+3. Em que paradigmas se encaixa? 
+O Dart é uma linguagem de programação orientada a objetos, que é uma linguagem de programação que possui uma sintaxe muito parecida com a de C#.
+
+4. Os nomes são sensíveis à capitalização? 
+Não, os nomes são case sensitive.
+
+5. Quais os caracteres aceitos em um nome? 
+Os caracteres aceitos são letras, números, underline e hifen.
+
+6. Existe alguma restrição de tamanho para nomes? 
+Não, os nomes podem ter qualquer tamanho.
+
+7. Como é a questão das palavras-chave x palavras reservadas? 
+As palavras-chave são palavras reservadas que são utilizadas para definir o comportamento de um programa.
+
+8. É possível definir uma variável anônima? Mostre exemplo. 
+Não, não é possível definir uma variável anônima.
+
+9. A vinculação de tipos (tipagem) é estática ou dinâmica? 
+A vinculação de tipos é estática.
+
+10. Quais categorias de variável (Sebesta, Seção 5.4.3) apresenta? Mostre exemplos.
+O Sebesta, na seção 5.4.3, apresenta variáveis que são utilizadas para armazenar valores.
+Um exemplo é:
+
+    var nome = "João";
+    var idade = 20;
+    var altura = 1.80;
+    var peso = 80;
+
+11. Permite ocultamento de nomes (variáveis) em blocos aninhados? Mostre exemplo. 
+Não, não permite ocultamento de nomes em blocos aninhados.
+
+    var nome = "João";
+    var idade = 20;
+    var altura = 1.80;
+    var peso = 80;
+    {
+        var nome = "Maria";
+        var idade = 20;
+        var altura = 1.80;
+        var peso = 80;
+    }
+    print(nome);
+    print(idade);
+    print(altura);
+    print(peso);
+
+12. Permite definir constantes? Vinculação estática ou dinâmica? Mostre exemplos. 
+Não, não permite definir constantes.
+
+13. Quais os tipos oferecidos? Mostre exemplos de definição de variáveis de cada tipo. 
+O tipo inteiro é um tipo de variável que armazena um número inteiro.
+O tipo double é um tipo de variável que armazena um número real.
+O tipo String é um tipo de variável que armazena uma string.
+O tipo bool é um tipo de variável que armazena um valor booleano.
+O tipo null é um tipo de variável que armazena um valor nulo.
+
+14. Existe o tipo função? São cidadãs de primeira classe? Mostre exemplo. 
+Não, não existe o tipo função.
+
+15. Possui ponteiros ou referências? Permite aritmética de ponteiros? 
+Não, não possui ponteiros.
+
+16. Oferece coletor de lixo? Se sim, qual a técnica utilizada? 
+Não, não oferece coletor de lixo.
+
+17. É possível quebrar seu sistema de tipos (forçar erro de tipo)? Mostre exemplo. 18. Quais os operadores oferecidos? Mostre exemplo de uso de cada operador. 19. Permite sobrecarga de operadores? Mostre exemplo. 
+20. Quais operadores funcionam com avaliação em curto-circuito? 
+21. O operador de atribuição funciona como uma expressão? 
+22. Quais as estruturas de controle (seleção, iteração) oferecidas? Mostre exemplos. 23. Quais sentenças de desvio incondicional oferecidas? Mostre exemplos. 24. Quais os métodos de passagem de parâmetros oferecidos? Mostre exemplos. 25. Permite sobrecarga de subprogramas? Mostre exemplo. 
+26. Permite subprogramas genéricos? Mostre exemplo. 
+27. Como é o suporte para definição de Tipos Abstratos de Dados? Mostre exemplo. 28. Permite TADs genéricos/parametrizáveis? Mostre exemplo. 
+29. Quais as construções de encapsulamento oferecidas? Mostre exemplos. 30. Quais tipos de polimorfismo suporta? Mostre exemplos. 
+31. Permite herança de tipos? Herança múltipla? Mostre exemplo. 
+32. Permite sobrescrita de subprogramas? Mostre exemplo. 
+33. Permite a definição de subprogramas abstratos? Mostre exemplo. 34. Oferece mecanismo de controle de exceções? Mostre exemplo.
+35. Possui hierarquia de exceções controlada, como em Java? Qual a raiz? 36. Categoriza as exceções em checadas e não-checadas? Como? 
+37. Obriga a declaração de exceções lançadas para fora de um subprograma? 38. Como você avalia a LP usando os critérios do Sebesta (Seção 1.3)? 39. Como você avalia a LP usando os critérios do Varejão? 
